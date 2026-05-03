@@ -25,3 +25,12 @@ Semua perubahan signifikan pada proyek ini akan didokumentasikan di file ini.
 ### Added
 - Setup cloud providers pipeline (GitHub, TiDB Serverless, Vercel).
 - Integrasi repositori lokal dengan remote GitHub.
+
+## [1.0.0-alpha.5] - 2026-05-04
+### Changed
+- Update remote repository GitHub ke `https://github.com/warnadunia/YoriPos.git` untuk bypass isu otentikasi akun Vercel lama.
+
+## [1.0.0-alpha.6] - 2026-05-04
+### Changed
+- Migrasi *entry point* dari `public/index.php` ke `api/index.php` untuk mematuhi aturan Vercel Serverless Functions.
+- Update konfigurasi `vercel.json` agar *routing* MVC mengarah ke `api/index.php`.
