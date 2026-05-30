@@ -1,16 +1,14 @@
 {
   "functions": {
-    "api/index.php": {
-      "runtime": "vercel-php@0.6.2"
-    }
+    "api/*.php": { "runtime": "vercel-php@0.6.2" },
+    "admin/*.php": { "runtime": "vercel-php@0.6.2" },
+    "index.php": { "runtime": "vercel-php@0.6.2" }
   },
-  "routes": [
+  "redirects": [
     {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/api/index.php"
+      "source": "/",
+      "destination": "/admin/?page=pos",
+      "permanent": false
     }
   ]
 }

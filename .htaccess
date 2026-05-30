@@ -1,0 +1,20 @@
+Options -Indexes
+DirectoryIndex index.php
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # KUNCI JAWABAN: Biar Apache Windows gak nyasar ke Drive C:
+    RewriteBase /
+
+    # Blokir akses langsung ke folder backend
+    RewriteRule ^app/(models|config|views)/(.*)$ - [F,L]
+
+    # AUTO RUN: Arahkan root ke POS (Pakai slash di depan admin)
+    RewriteRule ^$ admin/?page=pos [R=302,L]
+
+    # Hilangkan ekstensi .php
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteCond %{REQUEST_FILENAME}\.php -f
+    RewriteRule ^(.*)$ $1.php [L]
+</IfModule>
