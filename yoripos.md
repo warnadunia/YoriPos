@@ -5,7 +5,7 @@
 **Target Platform:** Web (PWA) & Android (TWA/APK)  
 
 ## 1. Ringkasan Eksekutif
-AsayoriPOS adalah aplikasi Point of Sale (POS) berbasis web yang dioptimalkan untuk perangkat mobile. Sistem ini dirancang dengan pendekatan PWA (Progressive Web App) yang ringan dan akan dibungkus menjadi file APK (TWA). Infrastruktur aplikasi ini didesain khusus agar dapat berjalan 100% pada ekosistem gratis (Vercel Free Tier dan TiDB Serverless) tanpa mengorbankan fungsionalitas inti kasir, pencatatan FIFO, dan laporan dasar[cite: 1]. 
+YoriPOS adalah aplikasi Point of Sale (POS) berbasis web yang dioptimalkan untuk perangkat mobile. Sistem ini dirancang dengan pendekatan PWA (Progressive Web App) yang ringan dan akan dibungkus menjadi file APK (TWA). Infrastruktur aplikasi ini didesain khusus agar dapat berjalan 100% pada ekosistem gratis (Vercel Free Tier dan TiDB Serverless) tanpa mengorbankan fungsionalitas inti kasir, pencatatan FIFO, dan laporan dasar[cite: 1]. 
 
 ## 2. Tujuan Produk
 *   Menyediakan sistem kasir yang cepat, responsif, dan stabil.

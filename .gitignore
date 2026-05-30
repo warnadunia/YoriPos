@@ -1,0 +1,14 @@
+# .gitignore
+
+# Environment variables (JANGAN PERNAH PUSH FILE INI)
+.env
+
+# Dependencies (kalau nanti kita pakai Composer)
+vendor/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Vercel local output
+.vercel/
