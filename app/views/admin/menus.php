@@ -125,7 +125,7 @@
     async function loadData() {
         fetchCategoriesForSelect(); // Tarik dropdown kategori
         try {
-            const response = await fetch('/yoripos/api/?action=get_products');
+            const response = await fetch('../api/?action=get_products');
             const result = await response.json();
             if (result.status === 'success') {
                 allMenus = result.data.filter(p => p.type === 'produk_jual');
@@ -141,7 +141,7 @@
     async function fetchCategoriesForSelect() {
         const select = document.getElementById('formCategory');
         try {
-            const response = await fetch('/yoripos/api/?action=get_categories');
+            const response = await fetch('../api/?action=get_categories');
             const result = await response.json();
             if (result.status === 'success') {
                 select.innerHTML = '<option value="">-- Pilih Kategori --</option>';
@@ -187,7 +187,7 @@
     async function uploadToBlob(file) {
         const formData = new FormData(); formData.append('image', file);
         try {
-            const res = await fetch('/yoripos/api/?action=upload_blob', { method: 'POST', body: formData });
+            const res = await fetch('../api/?action=upload_blob', { method: 'POST', body: formData });
             const data = await res.json();
             if(data.status === 'success') return data.url;
             Swal.fire('Upload Gagal', data.message, 'error'); return '';
@@ -271,7 +271,7 @@
         };
 
         try {
-            const res = await fetch('/yoripos/api/?action=save_product', { method: 'POST', body: JSON.stringify(payload) });
+            const res = await fetch('../api/?action=save_product', { method: 'POST', body: JSON.stringify(payload) });
             const data = await res.json();
             if(data.status === 'success') { Toast.fire({icon:'success', title: data.message}); closeMenuModal(); loadData(); }
             else { Swal.fire('Gagal', data.message, 'error'); }
@@ -289,7 +289,7 @@
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const res = await fetch('/yoripos/api/?action=delete_product', {
+                    const res = await fetch('../api/?action=delete_product', {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ id: id })
                     });
@@ -322,7 +322,7 @@
         tempRecipeMaterials = []; 
         
         try {
-            const res = await fetch(`/yoripos/api/?action=get_recipe&menu_id=${menuId}`);
+            const res = await fetch(`../api/?action=get_recipe&menu_id=${menuId}`);
             const result = await res.json();
             if(result.status === 'success' && result.data.length > 0) {
                 result.data.forEach(r => {
@@ -390,7 +390,7 @@
         const payload = { menu_id: currentActiveMenuId, materials: tempRecipeMaterials };
 
         try {
-            const res = await fetch('/yoripos/api/?action=save_recipe', { method: 'POST', body: JSON.stringify(payload) });
+            const res = await fetch('../api/?action=save_recipe', { method: 'POST', body: JSON.stringify(payload) });
             const data = await res.json();
             if(data.status === 'success') { Toast.fire({icon: 'success', title: data.message}); closeRecipeModal(); } 
             else { Swal.fire('Gagal', data.message, 'error'); }

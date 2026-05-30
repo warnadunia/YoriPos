@@ -94,7 +94,7 @@
     async function loadData() {
         fetchCategoriesForSelect();
         try {
-            const response = await fetch('/yoripos/api/?action=get_products');
+            const response = await fetch('../api/?action=get_products');
             const result = await response.json();
             if (result.status === 'success') {
                 // HANYA AMBIL BAHAN BAKU
@@ -109,7 +109,7 @@
     async function fetchCategoriesForSelect() {
         const select = document.getElementById('formCategory');
         try {
-            const response = await fetch('/yoripos/api/?action=get_categories');
+            const response = await fetch('../api/?action=get_categories');
             const result = await response.json();
             if (result.status === 'success') {
                 select.innerHTML = '<option value="">-- Pilih Kategori --</option>';
@@ -161,7 +161,7 @@
     async function uploadToBlob(file) {
         const formData = new FormData(); formData.append('image', file);
         try {
-            const res = await fetch('/yoripos/api/?action=upload_blob', { method: 'POST', body: formData });
+            const res = await fetch('../api/?action=upload_blob', { method: 'POST', body: formData });
             const data = await res.json();
             if(data.status === 'success') return data.url;
             Swal.fire('Upload Gagal', data.message, 'error'); return '';
@@ -246,7 +246,7 @@
         };
 
         try {
-            const res = await fetch('/yoripos/api/?action=save_product', { method: 'POST', body: JSON.stringify(payload) });
+            const res = await fetch('../api/?action=save_product', { method: 'POST', body: JSON.stringify(payload) });
             const data = await res.json();
             if(data.status === 'success') { Toast.fire({icon:'success', title: data.message}); closeMaterialModal(); loadData(); }
             else { Swal.fire('Gagal', data.message, 'error'); }

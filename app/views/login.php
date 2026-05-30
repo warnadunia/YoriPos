@@ -46,7 +46,7 @@
             };
 
             try {
-                const res = await fetch('/yoripos/api/?action=login', {
+                const res = await fetch('../api/?action=login', {
                     method: 'POST', headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });

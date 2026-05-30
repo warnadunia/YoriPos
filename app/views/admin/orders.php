@@ -94,7 +94,7 @@
         // Fetch "Bocoran" tanggal yang ada transaksinya dari server
         let activeDates = [];
         try {
-            const res = await fetch(`/yoripos/api/?action=get_active_dates&month=${m}&year=${y}&type=${apiType}`);
+            const res = await fetch(`../api/?action=get_active_dates&month=${m}&year=${y}&type=${apiType}`);
             const data = await res.json();
             if(data.status === 'success') activeDates = data.data;
         } catch(e) {}
@@ -158,7 +158,7 @@
         tbody.innerHTML = '<tr><td colspan="5" class="text-center py-12 text-indigo-500 font-bold animate-pulse">Memuat data pesanan...</td></tr>';
         
         try {
-            const response = await fetch(`/yoripos/api/?action=get_orders&date=${currentDate}`);
+            const response = await fetch(`../api/?action=get_orders&date=${currentDate}`);
             const result = await response.json();
             
             if (result.status === 'success') {
@@ -218,7 +218,7 @@
             if (result.isConfirmed || result.isDenied) {
                 const method = result.isConfirmed ? 'CASH' : 'PIUTANG'; 
                 try {
-                    const response = await fetch('/yoripos/api/?action=complete_order', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: id, payment_method: method }) });
+                    const response = await fetch('../api/?action=complete_order', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: id, payment_method: method }) });
                     const res = await response.json();
                     if (res.status === 'success') { Toast.fire({ icon: 'success', title: 'Mutasi Berhasil!' }); fetchActiveOrders(); } 
                     else { Swal.fire('Gagal', res.message, 'error'); }

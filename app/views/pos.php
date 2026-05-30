@@ -418,7 +418,7 @@
     // --- FUNGSI CUSTOMER ---
     async function fetchCustomers() {
         try {
-            const response = await fetch('/yoripos/api/?action=get_customers');
+            const response = await fetch('../api/?action=get_customers');
             const result = await response.json();
             if (result.status === 'success') {
                 originalCustomers = result.data;
@@ -453,7 +453,7 @@
             </div>`;
 
         try {
-            const response = await fetch('/yoripos/api/?action=get_customers');
+            const response = await fetch('../api/?action=get_customers');
             const result = await response.json();
             if (result.status === 'success') {
                 popupCustomersArray = result.data;
@@ -524,7 +524,7 @@
 
         btn.disabled = true; btn.innerText = 'Menyimpan...';
         try {
-            const response = await fetch('/yoripos/api/?action=save_customer', {
+            const response = await fetch('../api/?action=save_customer', {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name, phone, address })
             });
@@ -544,7 +544,7 @@
     // --- FUNGSI PRODUK & CART ---
     async function fetchProducts() {
         try {
-            const response = await fetch('/yoripos/api/?action=get_products');
+            const response = await fetch('../api/?action=get_products');
             const result = await response.json();
             if (result.status === 'success') { 
                 products = result.data.filter(p => p.type === 'produk_jual'); 
@@ -668,7 +668,7 @@
     // --- LOGIKA SHIFT KASIR ---
     async function checkOpenShift() {
         try {
-            const res = await fetch('/yoripos/api/?action=shift_status');
+            const res = await fetch('../api/?action=shift_status');
             const result = await res.json();
             
             if (result.status === 'error') {
@@ -698,7 +698,7 @@
 
     async function checkShiftForClose() {
         try {
-            const res = await fetch('/yoripos/api/?action=shift_status');
+            const res = await fetch('../api/?action=shift_status');
             const result = await res.json();
             if (result.status === 'success') {
                 document.getElementById('shiftExpectedCash').innerText = formatRupiah(result.data.expected_cash);
@@ -728,7 +728,7 @@
     async function submitOpenShift() {
         const startingCash = document.getElementById('inputStartingCash').value || 0;
         try {
-            const res = await fetch('/yoripos/api/?action=shift_open', {
+            const res = await fetch('../api/?action=shift_open', {
                 method: 'POST', headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ starting_cash: startingCash })
             });
@@ -752,7 +752,7 @@
         if(actualCash === '') { Swal.fire('Peringatan', 'Harap masukkan uang fisik sebenarnya!', 'warning'); return; }
 
         try {
-            const res = await fetch('/yoripos/api/?action=shift_close', {
+            const res = await fetch('../api/?action=shift_close', {
                 method: 'POST', headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ actual_cash: actualCash, notes: notes })
             });
@@ -884,7 +884,7 @@
     async function executePiutangCheckout() {
         const btn = document.getElementById('btnProceedCheckoutMethod'); btn.disabled = true;
         try {
-            const res = await fetch('/yoripos/api/?action=checkout', { method: 'POST', body: JSON.stringify({ cart: cart, total_amount: totalTagihanCheckout, payment_method: 'PIUTANG', customer_id: document.getElementById('customerSelect').value }) });
+            const res = await fetch('../api/?action=checkout', { method: 'POST', body: JSON.stringify({ cart: cart, total_amount: totalTagihanCheckout, payment_method: 'PIUTANG', customer_id: document.getElementById('customerSelect').value }) });
             const result = await res.json();
             if (result.status === 'success') { closeCheckoutMenuModal(); Swal.fire({icon: 'success', title: 'Piutang Dicatat!'}).then(() => { clearCart(); document.getElementById('customerSelect').value = ''; document.getElementById('customerSelectedNameDisplay').innerText = '-- Pelanggan Umum --'; }); }
         } catch (error) { console.error(error); } finally { btn.disabled = false; }
@@ -893,7 +893,7 @@
     async function executeOrderCheckout() {
         const btn = document.getElementById('btnProceedCheckoutMethod'); btn.disabled = true;
         try {
-            const res = await fetch('/yoripos/api/?action=checkout', { method: 'POST', body: JSON.stringify({ cart: cart, total_amount: totalTagihanCheckout, order_type: 'order', customer_id: document.getElementById('customerSelect').value }) });
+            const res = await fetch('../api/?action=checkout', { method: 'POST', body: JSON.stringify({ cart: cart, total_amount: totalTagihanCheckout, order_type: 'order', customer_id: document.getElementById('customerSelect').value }) });
             const result = await res.json();
             if (result.status === 'success') { closeCheckoutMenuModal(); Swal.fire({icon: 'success', title: 'Pesanan Dibuat!'}).then(() => { clearCart(); document.getElementById('customerSelect').value = ''; document.getElementById('customerSelectedNameDisplay').innerText = '-- Pelanggan Umum --'; }); }
         } catch (error) { console.error(error); } finally { btn.disabled = false; }
@@ -951,7 +951,7 @@
 
         const btnConfirm = document.getElementById('btnConfirmPay'); btnConfirm.disabled = true; btnConfirm.innerText = 'MEMPROSES...';
         try {
-            const response = await fetch('/yoripos/api/?action=checkout', { method: 'POST', body: JSON.stringify({ cart: cart, total_amount: totalTagihanCheckout, payment_method: currentPaymentMethod, customer_id: document.getElementById('customerSelect').value, payment_proof: paymentProof }) });
+            const response = await fetch('../api/?action=checkout', { method: 'POST', body: JSON.stringify({ cart: cart, total_amount: totalTagihanCheckout, payment_method: currentPaymentMethod, customer_id: document.getElementById('customerSelect').value, payment_proof: paymentProof }) });
             const result = await response.json();
             if (result.status === 'success') {
                 const savedCart = [...cart]; const savedTotal = totalTagihanCheckout; closePaymentModal();
@@ -988,7 +988,7 @@
     }
 
     async function fetchAppSettings() {
-        try { const res = await fetch('/yoripos/api/?action=get_settings'); const data = await res.json(); if (data.status === 'success') { appSettings = data.data; renderDynamicPaymentMethods(); } } catch (e) { console.error('Gagal settings'); }
+        try { const res = await fetch('../api/?action=get_settings'); const data = await res.json(); if (data.status === 'success') { appSettings = data.data; renderDynamicPaymentMethods(); } } catch (e) { console.error('Gagal settings'); }
     }
 
     document.getElementById('inputPaymentProof').addEventListener('change', function(e) {

@@ -87,7 +87,7 @@
         // Fetch "Bocoran" tanggal yang ada transaksinya dari server
         let activeDates = [];
         try {
-            const res = await fetch(`/yoripos/api/?action=get_active_dates&month=${m}&year=${y}&type=${apiType}`);
+            const res = await fetch(`../api/?action=get_active_dates&month=${m}&year=${y}&type=${apiType}`);
             const data = await res.json();
             if(data.status === 'success') activeDates = data.data;
         } catch(e) {}
@@ -148,7 +148,7 @@
         tbody.innerHTML = '<tr><td colspan="5" class="text-center py-12 text-red-500 font-bold animate-pulse">Memuat data piutang...</td></tr>';
         
         try {
-            const response = await fetch(`/yoripos/api/?action=get_receivables&date=${currentDate}`);
+            const response = await fetch(`../api/?action=get_receivables&date=${currentDate}`);
             const result = await response.json();
             if (result.status === 'success') { renderReceivables(result.data); }
         } catch (error) { tbody.innerHTML = '<tr><td colspan="5" class="text-center py-12 text-red-500">Gagal terhubung ke server.</td></tr>'; }
@@ -188,7 +188,7 @@
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                             Lunasi
                         </button>
-                        <button onclick="window.open('/yoripos/api/?action=view_receipt&invoice=${inv.invoice_number}', '_blank', 'width=450,height=700')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-1.5 px-4 rounded-lg text-xs transition duration-200 mx-auto w-full">
+                        <button onclick="window.open('../api/?action=view_receipt&invoice=${inv.invoice_number}', '_blank', 'width=450,height=700')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-1.5 px-4 rounded-lg text-xs transition duration-200 mx-auto w-full">
                             Struk Kasbon
                         </button>
                     </td>
@@ -208,7 +208,7 @@
             if (result.isConfirmed || result.isDenied) {
                 const method = result.isConfirmed ? 'CASH' : 'QRIS'; 
                 try {
-                    const response = await fetch('/yoripos/api/?action=complete_order', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: id, payment_method: method }) });
+                    const response = await fetch('../api/?action=complete_order', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: id, payment_method: method }) });
                     const res = await response.json();
                     if (res.status === 'success') { Toast.fire({ icon: 'success', title: 'Piutang Dilunasi!' }); fetchReceivables(); } 
                     else { Swal.fire('Gagal', res.message, 'error'); }

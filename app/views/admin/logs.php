@@ -33,7 +33,7 @@
     async function loadLogs() {
         const container = document.getElementById('logContainer');
         try {
-            const res = await fetch('/yoripos/api/?action=get_logs');
+            const res = await fetch('../api/?action=get_logs');
             const result = await res.json();
             
             if (result.status === 'success') {
@@ -68,7 +68,7 @@
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const res = await fetch('/yoripos/api/?action=clear_logs', { method: 'POST' });
+                    const res = await fetch('../api/?action=clear_logs', { method: 'POST' });
                     const data = await res.json();
                     if(data.status === 'success') { loadLogs(); Swal.fire('Berhasil!', data.message, 'success'); }
                 } catch(e) {}

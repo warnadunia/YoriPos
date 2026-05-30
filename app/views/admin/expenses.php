@@ -86,7 +86,7 @@
 
     async function loadExpenses() {
         try {
-            const res = await fetch('/yoripos/api/?action=get_expenses');
+            const res = await fetch('../api/?action=get_expenses');
             const result = await res.json();
             const tbody = document.getElementById('expenseTableBody');
             
@@ -172,7 +172,7 @@
         btn.disabled = true; btn.innerText = 'Menyimpan...';
 
         try {
-            const res = await fetch('/yoripos/api/?action=save_expense', { method: 'POST', body: JSON.stringify(payload) });
+            const res = await fetch('../api/?action=save_expense', { method: 'POST', body: JSON.stringify(payload) });
             const data = await res.json();
             if(data.status === 'success') { Toast.fire({icon: 'success', title: data.message}); closeExpenseModal(); loadExpenses(); } 
             else { Swal.fire('Gagal', data.message, 'error'); }
@@ -187,7 +187,7 @@
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const res = await fetch('/yoripos/api/?action=delete_expense', { method: 'POST', body: JSON.stringify({ id: id }) });
+                    const res = await fetch('../api/?action=delete_expense', { method: 'POST', body: JSON.stringify({ id: id }) });
                     const data = await res.json();
                     if(data.status === 'success') { Toast.fire({icon: 'success', title: data.message}); loadExpenses(); }
                 } catch(e) {}

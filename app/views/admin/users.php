@@ -116,7 +116,7 @@
 
     // --- ROLES LOGIC ---
     async function loadRoles() {
-        const res = await fetch('/yoripos/api/?action=get_roles');
+        const res = await fetch('../api/?action=get_roles');
         const result = await res.json();
         if (result.status === 'success') {
             rolesData = result.data;
@@ -170,13 +170,13 @@
         if(!name) { Swal.fire('Peringatan', 'Nama jabatan wajib diisi!', 'warning'); return; }
 
         const btn = document.getElementById('btnSaveRole'); btn.disabled = true; btn.innerText = '...';
-        await fetch('/yoripos/api/?action=save_role', { method: 'POST', body: JSON.stringify({ id, name, permissions: perms }) });
+        await fetch('../api/?action=save_role', { method: 'POST', body: JSON.stringify({ id, name, permissions: perms }) });
         closeRoleModal(); await loadRoles(); btn.disabled = false; btn.innerText = 'Simpan';
     }
 
     // --- USERS LOGIC ---
     async function loadUsers() {
-        const res = await fetch('/yoripos/api/?action=get_users');
+        const res = await fetch('../api/?action=get_users');
         const result = await res.json();
         if (result.status === 'success') {
             const container = document.getElementById('usersContainer'); container.innerHTML = '';
@@ -233,7 +233,7 @@
         if(!id && !password) { Swal.fire('Peringatan', 'Password akun baru wajib diisi!', 'warning'); return; }
 
         const btn = document.getElementById('btnSaveUser'); btn.disabled = true; btn.innerText = '...';
-        await fetch('/yoripos/api/?action=save_user', { method: 'POST', body: JSON.stringify({ id, name, username, password, role_id }) });
+        await fetch('../api/?action=save_user', { method: 'POST', body: JSON.stringify({ id, name, username, password, role_id }) });
         closeUserModal(); await loadUsers(); btn.disabled = false; btn.innerText = 'Simpan Staf';
     }
 

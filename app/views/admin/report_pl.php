@@ -86,14 +86,14 @@
         
         try {
             // Ambil Nama Toko
-            const setRes = await fetch('/yoripos/api/?action=get_settings');
+            const setRes = await fetch('../api/?action=get_settings');
             const setDat = await setRes.json();
             if(setDat.status === 'success' && setDat.data.store_name) {
                 document.getElementById('reportStoreName').innerText = setDat.data.store_name;
             }
 
             // Ambil Data Laba Rugi
-            const res = await fetch(`/yoripos/api/?action=get_profit_loss&start=${start}&end=${end}`);
+            const res = await fetch(`../api/?action=get_profit_loss&start=${start}&end=${end}`);
             const result = await res.json();
             
             if (result.status === 'success') {

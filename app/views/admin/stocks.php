@@ -95,7 +95,7 @@
     async function fetchProductsForDropdown() {
         const select = document.getElementById('formProductId');
         try {
-            const response = await fetch('/yoripos/api/?action=get_products');
+            const response = await fetch('../api/?action=get_products');
             const result = await response.json();
             if (result.status === 'success') {
                 select.innerHTML = '<option value="">-- Pilih Barang Datang --</option>';
@@ -131,7 +131,7 @@
         tbody.innerHTML = `<tr><td colspan="5" class="px-6 py-10 text-center text-slate-400">Memuat data stok...</td></tr>`;
         
         try {
-            const response = await fetch('/yoripos/api/?action=get_stocks');
+            const response = await fetch('../api/?action=get_stocks');
             const result = await response.json();
 
             if (result.status === 'success') {
@@ -182,7 +182,7 @@
         };
 
         try {
-            const response = await fetch('/yoripos/api/?action=save_stock', {
+            const response = await fetch('../api/?action=save_stock', {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(payload)
             });

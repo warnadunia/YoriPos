@@ -27,7 +27,7 @@
     <script>
         window.onerror = function(message, source, lineno, colno, error) {
             const traceInfo = error ? error.stack : `File: ${source} | Line: ${lineno}, Col: ${colno}`;
-            fetch('/yoripos/api/?action=log_error', {
+            fetch('../api/?action=log_error', {
                 method: 'POST',
                 body: JSON.stringify({ source: 'JS_GLOBAL', message: message, trace: traceInfo })
             }).catch(e => console.log("Logger failed"));
@@ -36,7 +36,7 @@
         window.addEventListener('unhandledrejection', function(event) {
             const msg = event.reason ? (event.reason.message || event.reason.toString()) : 'Unhandled Promise Error';
             const trace = event.reason && event.reason.stack ? event.reason.stack : '';
-            fetch('/yoripos/api/?action=log_error', {
+            fetch('../api/?action=log_error', {
                 method: 'POST',
                 body: JSON.stringify({ source: 'JS_PROMISE', message: msg, trace: trace })
             }).catch(e => console.log("Logger failed"));

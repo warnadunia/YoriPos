@@ -59,7 +59,7 @@
         const tbody = document.getElementById('categoryTableBody');
         tbody.innerHTML = `<tr><td colspan="3" class="px-6 py-4 text-center text-slate-400">Memuat data...</td></tr>`;
         try {
-            const response = await fetch('/yoripos/api/?action=get_categories');
+            const response = await fetch('../api/?action=get_categories');
             const result = await response.json();
             if (result.status === 'success') {
                 currentCategories = result.data;
@@ -88,7 +88,7 @@
         const ogText = btn.innerText; btn.innerText = 'Menyimpan...'; btn.disabled = true;
 
         try {
-            const response = await fetch('/yoripos/api/?action=save_category', {
+            const response = await fetch('../api/?action=save_category', {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ id: document.getElementById('catId').value, name: document.getElementById('catName').value })
             });
@@ -114,7 +114,7 @@
         Swal.fire({ title: 'Hapus kategori?', icon: 'warning', showCancelButton: true, confirmButtonColor: '#ef4444', confirmButtonText: 'Ya, Hapus!'
         }).then(async (result) => {
             if (result.isConfirmed) {
-                const response = await fetch('/yoripos/api/?action=delete_category', { method: 'POST', body: JSON.stringify({ id: id }) });
+                const response = await fetch('../api/?action=delete_category', { method: 'POST', body: JSON.stringify({ id: id }) });
                 const res = await response.json();
                 if (res.status === 'success') { loadCategories(); Swal.fire('Terhapus!', '', 'success'); } 
                 else { Swal.fire('Gagal', res.message, 'error'); }

@@ -124,7 +124,7 @@
 
     async function loadDashboardStats() {
         try {
-            const res = await fetch('/yoripos/api/?action=get_dashboard_stats');
+            const res = await fetch('../api/?action=get_dashboard_stats');
             const result = await res.json();
             
             if (result.status === 'success') {

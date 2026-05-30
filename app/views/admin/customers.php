@@ -75,7 +75,7 @@
 
     async function fetchCustomers() {
         try {
-            const response = await fetch('/yoripos/api/?action=get_customers');
+            const response = await fetch('../api/?action=get_customers');
             const result = await response.json();
             if (result.status === 'success') {
                 allCustomers = result.data;
@@ -151,7 +151,7 @@
         if(!name) { Toast.fire({ icon: 'warning', title: 'Nama pelanggan wajib diisi!' }); return; }
 
         try {
-            const response = await fetch('/yoripos/api/?action=save_customer', {
+            const response = await fetch('../api/?action=save_customer', {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ id, name, phone, address })
             });
@@ -172,7 +172,7 @@
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch('/yoripos/api/?action=delete_customer', {
+                    const response = await fetch('../api/?action=delete_customer', {
                         method: 'POST', headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ id: id })
                     });

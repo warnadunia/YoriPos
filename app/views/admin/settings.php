@@ -89,7 +89,7 @@
 
     async function loadSettings() {
         try {
-            const res = await fetch('/yoripos/api/?action=get_settings');
+            const res = await fetch('../api/?action=get_settings');
             const result = await res.json();
             if (result.status === 'success') {
                 const data = result.data;
@@ -204,7 +204,7 @@
         };
 
         try {
-            const res = await fetch('/yoripos/api/?action=save_settings', {
+            const res = await fetch('../api/?action=save_settings', {
                 method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
             });
             const result = await res.json();

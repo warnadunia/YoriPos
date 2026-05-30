@@ -85,7 +85,7 @@
         // Fetch "Bocoran" tanggal yang ada transaksinya dari server
         let activeDates = [];
         try {
-            const res = await fetch(`/yoripos/api/?action=get_active_dates&month=${m}&year=${y}&type=${apiType}`);
+            const res = await fetch(`../api/?action=get_active_dates&month=${m}&year=${y}&type=${apiType}`);
             const data = await res.json();
             if(data.status === 'success') activeDates = data.data;
         } catch(e) {}
@@ -146,7 +146,7 @@
         tbody.innerHTML = '<tr><td colspan="5" class="text-center py-12 text-indigo-500 font-bold animate-pulse">Memuat data transaksi...</td></tr>';
         
         try {
-            const response = await fetch(`/yoripos/api/?action=get_transactions&date=${currentDate}`);
+            const response = await fetch(`../api/?action=get_transactions&date=${currentDate}`);
             const result = await response.json();
             if (result.status === 'success') { renderTransactions(result.data); }
         } catch (error) { tbody.innerHTML = '<tr><td colspan="5" class="text-center py-12 text-red-500">Gagal terhubung ke server.</td></tr>'; }
@@ -188,7 +188,7 @@
                     <td class="px-6 py-4">${itemsHtml}</td>
                     <td class="px-6 py-4 text-right font-black text-emerald-600 dark:text-emerald-400">${formatRp(trx.total_amount)}</td>
                     <td class="px-6 py-4 text-center">
-                        <button onclick="window.open('/yoripos/api/?action=view_receipt&invoice=${trx.invoice_number}', '_blank', 'width=450,height=700')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2 px-4 rounded-lg text-xs transition duration-200 shadow-sm flex items-center gap-2 mx-auto">
+                        <button onclick="window.open('../api/?action=view_receipt&invoice=${trx.invoice_number}', '_blank', 'width=450,height=700')" class="bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold py-2 px-4 rounded-lg text-xs transition duration-200 shadow-sm flex items-center gap-2 mx-auto">
                             🖨️ Struk
                         </button>
                     </td>

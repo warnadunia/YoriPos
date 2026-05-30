@@ -110,7 +110,7 @@
 
     async function loadClosedPeriods() {
         try {
-            const res = await fetch('/yoripos/api/?action=get_closed_periods');
+            const res = await fetch('../api/?action=get_closed_periods');
             const result = await res.json();
             const tbody = document.getElementById('closingTableBody');
             
@@ -155,7 +155,7 @@
         btn.disabled = true; btn.innerText = 'Mengunci...';
 
         try {
-            const res = await fetch('/yoripos/api/?action=do_closing', { 
+            const res = await fetch('../api/?action=do_closing', { 
                 method: 'POST', 
                 body: JSON.stringify({ month: month, year: year }) 
             });
@@ -177,7 +177,7 @@
 
     async function loadAnnualClosedYears() {
         try {
-            const res = await fetch('/yoripos/api/?action=get_closed_years');
+            const res = await fetch('../api/?action=get_closed_years');
             const result = await res.json();
             const tbody = document.getElementById('annualClosingTableBody');
             if (result.status === 'success') {
@@ -206,7 +206,7 @@
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const res = await fetch('/yoripos/api/?action=do_annual_closing', { method: 'POST', body: JSON.stringify({ year: year }) });
+                    const res = await fetch('../api/?action=do_annual_closing', { method: 'POST', body: JSON.stringify({ year: year }) });
                     const data = await res.json();
                     if(data.status === 'success') { Swal.fire('Terkunci!', data.message, 'success'); loadAnnualClosedYears(); } 
                     else { Swal.fire('Gagal', data.message, 'error'); }

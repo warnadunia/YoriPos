@@ -125,7 +125,7 @@
     async function fetchCategoriesForSelect() {
         const select = document.getElementById('formCategory');
         try {
-            const response = await fetch('/yoripos/api/?action=get_categories');
+            const response = await fetch('../api/?action=get_categories');
             const result = await response.json();
             if (result.status === 'success') {
                 select.innerHTML = '<option value="">-- Pilih Kategori --</option>';
@@ -145,7 +145,7 @@
         tbody.innerHTML = `<tr><td colspan="8" class="px-6 py-10 text-center text-slate-400">Memuat data...</td></tr>`;
         
         try {
-            const response = await fetch('/yoripos/api/?action=get_products');
+            const response = await fetch('../api/?action=get_products');
             const result = await response.json();
 
             if (result.status === 'success') {
@@ -236,7 +236,7 @@
         const formData = new FormData();
         formData.append('image', file);
         try {
-            const res = await fetch('/yoripos/api/?action=upload_blob', { method: 'POST', body: formData });
+            const res = await fetch('../api/?action=upload_blob', { method: 'POST', body: formData });
             const data = await res.json();
             if(data.status === 'success') return data.url;
             Swal.fire('Upload Gagal', data.message, 'error'); return '';
@@ -281,7 +281,7 @@
         };
 
         try {
-            const response = await fetch('/yoripos/api/?action=save_product', {
+            const response = await fetch('../api/?action=save_product', {
                 method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload)
             });
             const result = await response.json();
@@ -339,7 +339,7 @@
         }).then(async (result) => {
             if (result.isConfirmed) {
                 try {
-                    const response = await fetch('/yoripos/api/?action=delete_product', {
+                    const response = await fetch('../api/?action=delete_product', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ id: id })
