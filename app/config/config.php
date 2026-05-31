@@ -1,29 +1,21 @@
 <?php
 // =========================================================
-// CENTRALIZED CONFIGURATION (Pengaturan Kunci API & Server)
+// 1. CENTRALIZED CONFIGURATION (Pengaturan Kunci API & Server)
 // =========================================================
-
-// Token Vercel Blob Storage
 define('BLOB_READ_WRITE_TOKEN', getenv('BLOB_READ_WRITE_TOKEN') ?: 'vercel_blob_rw_nqfPnuiuW2lY0KRe_Ss57T1f5TlP6FtJ0qDyhotllFkfCqK');
-
-// URL Dasar Aplikasi (Otomatis deteksi dari Vercel, fallback ke localhost)
 define('APP_URL', getenv('VERCEL_URL') ? 'https://' . getenv('VERCEL_URL') : 'http://localhost/yoripos');
 
-// =========================================================
-// 1. KONEKSI DATABASE (TIDB) - WAJIB ADA DI SINI!
-// =========================================================
-try {
-    // MASUKIN KONEKSI TIDB LU DI SINI:
-    // Contoh: $db = new PDO("mysql:host=gateway01.ap-southeast-1.prod.aws.tidbcloud.com;port=4000;dbname=yoripos...", "username", "password");
-    
-    $db = new PDO("mysql:host=localhost;dbname=yoripos", "root", ""); // <-- GANTI PAKAI TIDB LU
-    $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Koneksi Database Gagal: " . $e->getMessage());
-}
 
 // =========================================================
-// 2. VAKSIN ANTI-AMNESIA VERCEL (DATABASE SESSION HANDLER)
+// 2. PANGGIL KONEKSI DATABASE LU
+// =========================================================
+require_once __DIR__ . '/database.php';
+$database = new Database();
+$db = $database->getConnection();
+
+
+// =========================================================
+// 3. VAKSIN ANTI-AMNESIA VERCEL (DATABASE SESSION HANDLER)
 // =========================================================
 class DBSessionHandler implements SessionHandlerInterface {
     private $pdo;
@@ -66,7 +58,7 @@ class DBSessionHandler implements SessionHandlerInterface {
 session_set_save_handler(new DBSessionHandler($db), true);
 
 // =========================================================
-// 3. MULAI SESSION
+// 4. MULAI SESSION
 // =========================================================
 session_start();
-?> 
+?>
