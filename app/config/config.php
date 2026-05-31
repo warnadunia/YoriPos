@@ -54,7 +54,12 @@ class DBSessionHandler implements SessionHandlerInterface {
     }
 }
 
-// Aktifkan handler database sesaat sebelum session_start()
+// FIX: Cek apakah Vercel sudah terlanjur menjalankan session secara otomatis
+if (session_status() === PHP_SESSION_ACTIVE) {
+    session_write_close(); // Matikan dulu session bawaan server
+}
+
+// Aktifkan handler database kustom kita
 session_set_save_handler(new DBSessionHandler($db), true);
 
 // =========================================================
