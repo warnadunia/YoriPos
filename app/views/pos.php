@@ -1,3 +1,9 @@
+<style>
+    /* Sembunyikan scrollbar tapi tetep bisa di-scroll */
+    .hide-scrollbar::-webkit-scrollbar { display: none; }
+    .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
+
 <div class="flex flex-col md:flex-row w-full flex-1 overflow-hidden">
     
     <main class="flex-1 flex flex-col h-full relative border-r border-slate-200 dark:border-slate-800">
@@ -19,41 +25,55 @@
                 <span class="font-black text-amber-600 dark:text-amber-400 text-lg" id="statTransfer">Rp 0</span>
             </div>
         </div>
-        <div class="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center gap-4 bg-white dark:bg-slate-900 z-10">
-            <div class="relative flex-1">
-                <input type="text" id="searchInput" placeholder="Cari nama produk atau SKU..." class="w-full bg-slate-100 dark:bg-slate-800 border border-transparent dark:border-slate-700 text-slate-900 dark:text-slate-100 rounded-lg px-5 py-3.5 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all text-lg placeholder-slate-500 shadow-inner">
+
+        <!-- REFINED: HEADER (Pencarian, Filter Kategori & Tombol Aksi) -->
+        <div class="p-4 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 z-10 flex flex-col gap-3">
+            <!-- Baris 1: Search & Buttons -->
+            <div class="flex flex-col md:flex-row items-center gap-4">
+                <div class="relative w-full md:flex-1">
+                    <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-slate-400"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></span>
+                    <input type="text" id="searchInput" placeholder="Cari nama menu..." class="w-full bg-slate-100 dark:bg-slate-800 border border-transparent dark:border-slate-700 text-slate-900 dark:text-slate-100 rounded-xl pl-11 pr-5 py-3 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all placeholder-slate-500 shadow-inner">
+                </div>
+
+                <div class="flex items-center gap-3 w-full md:w-auto overflow-x-auto hide-scrollbar pb-1 md:pb-0">
+                    <!-- FIX URL: Dibuat jadi dinamis ?page=... -->
+                    <div onclick="window.location.href='?page=transactions'" title="Lihat Riwayat Transaksi" class="cursor-pointer hover:scale-105 active:scale-95 transition-all bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 px-3 py-2 rounded-xl text-xs font-bold border border-emerald-200 dark:border-emerald-800 flex flex-col items-center min-w-[70px] shadow-sm">
+                        <span class="text-[9px] uppercase tracking-wider opacity-70">Lunas</span>
+                        <span class="text-lg leading-none mt-0.5"><span id="badgeKwi">0</span> <span class="text-[10px]">KWI</span></span>
+                    </div>
+                    
+                    <div onclick="window.location.href='?page=orders'" title="Lihat Antrean Pesanan" class="cursor-pointer hover:scale-105 active:scale-95 transition-all bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 px-3 py-2 rounded-xl text-xs font-bold border border-amber-200 dark:border-amber-800 flex flex-col items-center min-w-[70px] shadow-sm">
+                        <span class="text-[9px] uppercase tracking-wider opacity-70">Pesanan</span>
+                        <span class="text-lg leading-none mt-0.5"><span id="badgeOrd">0</span> <span class="text-[10px]">ORD</span></span>
+                    </div>
+                    
+                    <div onclick="window.location.href='?page=receivables'" title="Lihat Tagihan Piutang" class="cursor-pointer hover:scale-105 active:scale-95 transition-all bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 px-3 py-2 rounded-xl text-xs font-bold border border-red-200 dark:border-red-800 flex flex-col items-center min-w-[70px] shadow-sm">
+                        <span class="text-[9px] uppercase tracking-wider opacity-70">Piutang</span>
+                        <span class="text-lg leading-none mt-0.5"><span id="badgeInv">0</span> <span class="text-[10px]">INV</span></span>
+                    </div>
+
+                    <button onclick="checkShiftForClose()" class="p-3 h-full rounded-xl bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-800 transition-all shadow-sm font-bold flex items-center justify-center flex-shrink-0">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                    </button>
+                    <button id="themeToggle" class="p-3 h-full rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all shadow-sm flex items-center justify-center flex-shrink-0">
+                        <svg id="themeToggleDarkIcon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+                        <svg id="themeToggleLightIcon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+                    </button>
+                </div>
             </div>
 
-                
-                <div onclick="window.location.href='<?= APP_URL ?? '/yoripos' ?>/admin/?page=transactions'" title="Lihat Riwayat Transaksi" class="cursor-pointer hover:scale-105 hover:shadow-md active:scale-95 transition-all bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-400 px-3 py-2 rounded-xl text-xs font-bold border border-emerald-200 dark:border-emerald-800 flex flex-col items-center min-w-[70px]">
-                    <span class="text-[9px] uppercase tracking-wider opacity-70">Lunas</span>
-                    <span class="text-lg leading-none mt-0.5"><span id="badgeKwi">0</span> <span class="text-[10px]">KWI</span></span>
-                </div>
-                
-                <div onclick="window.location.href='<?= APP_URL ?? '/yoripos' ?>/admin/?page=orders'" title="Lihat Antrean Pesanan" class="cursor-pointer hover:scale-105 hover:shadow-md active:scale-95 transition-all bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 px-3 py-2 rounded-xl text-xs font-bold border border-amber-200 dark:border-amber-800 flex flex-col items-center min-w-[70px]">
-                    <span class="text-[9px] uppercase tracking-wider opacity-70">Pesanan</span>
-                    <span class="text-lg leading-none mt-0.5"><span id="badgeOrd">0</span> <span class="text-[10px]">ORD</span></span>
-                </div>
-                
-                <div onclick="window.location.href='<?= APP_URL ?? '/yoripos' ?>/admin/?page=receivables'" title="Lihat Tagihan Piutang" class="cursor-pointer hover:scale-105 hover:shadow-md active:scale-95 transition-all bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 px-3 py-2 rounded-xl text-xs font-bold border border-red-200 dark:border-red-800 flex flex-col items-center min-w-[70px]">
-                    <span class="text-[9px] uppercase tracking-wider opacity-70">Piutang</span>
-                    <span class="text-lg leading-none mt-0.5"><span id="badgeInv">0</span> <span class="text-[10px]">INV</span></span>
-                </div>
-
-            <button onclick="checkShiftForClose()" class="p-3 rounded-xl bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-800 transition-all shadow-sm font-bold text-sm flex items-center gap-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                <span class="hidden sm:inline">Tutup Kasir</span>
-            </button>
-            <button id="themeToggle" class="p-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-all shadow-sm">
-                <svg id="themeToggleDarkIcon" class="hidden w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
-                <svg id="themeToggleLightIcon" class="hidden w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
-            </button>
+            <!-- NEW: Kategori Filter Horizontal -->
+            <div id="categoryFilterContainer" class="flex gap-2 overflow-x-auto hide-scrollbar pt-1 pb-2">
+                <!-- Data kategori dimuat via JS -->
+            </div>
         </div>
+
         <div class="flex-1 overflow-y-auto p-4 md:p-6 bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
             <div id="productGrid" class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5"></div>
         </div>
     </main>
 
+    <!-- ... BAGIAN SIDEBAR CART & MODAL TETAP SAMA SEPERTI SEBELUMNYA ... -->
     <aside class="w-full md:w-[400px] bg-white dark:bg-slate-800 flex flex-col h-full z-20 shadow-[-10px_0_15px_-3px_rgba(0,0,0,0.1)] transition-colors duration-300">
         <div class="p-4 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 flex justify-between items-center transition-colors duration-300">
             <h2 class="text-lg font-bold text-slate-800 dark:text-slate-100 tracking-wide">Daftar Pesanan</h2>
@@ -79,7 +99,6 @@
             </div>
 
             <?php 
-            // MENU RAHASIA: HANYA MUNCUL JIKA USER PUNYA AKSES 'settings'
             $perms = $_SESSION['permissions'] ?? [];
             if(in_array('settings', $perms)): 
             ?>
@@ -98,9 +117,9 @@
             </button>
         </div>
     </aside>
-
 </div>
 
+<!-- ... (BAGIAN MODAL TETAP SAMA, BIARKAN SAJA) ... -->
 <!-- MODAL MENU CHECKOUT (LEVEL 1: Pilih Metode Pesanan) -->
 <div id="checkoutMenuModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[60] hidden flex items-end sm:items-center justify-center transition-opacity opacity-0">
     <div class="bg-white dark:bg-slate-800 w-full sm:w-[500px] sm:rounded-3xl rounded-t-3xl shadow-2xl overflow-hidden transform transition-all translate-y-full sm:translate-y-0 sm:scale-95 flex flex-col max-h-[95vh]" id="checkoutMenuModalContent">
@@ -385,6 +404,55 @@
         updateIcon();
     });
 
+    // --- LOGIKA FILTER PENCARIAN & KATEGORI ---
+    let activeCategory = 'all';
+    let categoriesList = [];
+
+    document.getElementById('searchInput').addEventListener('input', filterProducts);
+
+    async function fetchCategories() {
+        try {
+            const res = await fetch('../api/?action=get_categories');
+            const result = await res.json();
+            if (result.status === 'success') {
+                categoriesList = result.data;
+                renderCategoryFilter();
+            }
+        } catch (e) { console.error('Gagal fetch kategori', e); }
+    }
+
+    function renderCategoryFilter() {
+        const container = document.getElementById('categoryFilterContainer');
+        if (!container) return;
+        
+        let html = `<button onclick="setCategory('all')" class="px-5 py-2 rounded-full font-bold text-sm whitespace-nowrap transition-all shadow-sm ${activeCategory === 'all' ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-indigo-400'}">Semua Menu</button>`;
+        
+        categoriesList.forEach(c => {
+            // FIX: Cocokkan activeCategory dengan c.name (teks), karena data produk pakai nama kategori
+            const isActive = activeCategory === c.name;
+            // FIX: Kirim c.name ke fungsi setCategory
+            html += `<button onclick="setCategory('${c.name}')" class="px-5 py-2 rounded-full font-bold text-sm whitespace-nowrap transition-all shadow-sm ${isActive ? 'bg-indigo-600 text-white border-indigo-600' : 'bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 hover:border-indigo-400'}">${c.name}</button>`;
+        });
+        container.innerHTML = html;
+    }
+
+    function setCategory(categoryName) {
+        activeCategory = categoryName;
+        renderCategoryFilter();
+        filterProducts();
+    }
+
+    function filterProducts() {
+        const keyword = document.getElementById('searchInput').value.toLowerCase();
+        const filtered = products.filter(p => {
+            const matchKeyword = p.name.toLowerCase().includes(keyword) || (p.sku && p.sku.toLowerCase().includes(keyword));
+            // FIX: Filter berdasarkan field p.category (yang isinya teks string)
+            const matchCategory = activeCategory === 'all' || p.category === activeCategory;
+            return matchKeyword && matchCategory;
+        });
+        renderProducts(filtered);
+    }
+
     // --- LOGIKA UPDATE MANUAL KUANTITAS PRODUK ---
     function manualUpdateQty(productId, value) {
         const itemIndex = cart.findIndex(item => item.product_id == productId);
@@ -554,7 +622,8 @@
                         p.recipe_details.forEach(mat => { rawMaterialStocks[mat.material_id] = mat.material_stock; });
                     }
                 });
-                updateDynamicStocks(); renderProducts(products); 
+                updateDynamicStocks(); 
+                filterProducts(); // FIX: Gunakan filterProducts() bukan renderProducts(products) supaya filter awal jalan
             }
         } catch (error) { console.error('Gagal mengambil data:', error); }
     }
@@ -625,7 +694,7 @@
         if (!product || product.calculated_stock <= 0) { Toast.fire({ icon: 'warning', title: 'Stok tidak mencukupi!' }); return; }
         const existingItem = cart.find(item => item.product_id == productId);
         if (existingItem) existingItem.qty += 1; else cart.push({ product_id: product.id, name: product.name, price_sell: product.price_sell, qty: 1 });
-        updateDynamicStocks(); renderProducts(products); renderCart();
+        updateDynamicStocks(); filterProducts(); renderCart(); // FIX: Gunakan filterProducts()
     }
 
     function updateQty(productId, change) {
@@ -635,11 +704,11 @@
             if (change > 0 && product.calculated_stock <= 0) { Toast.fire({ icon: 'warning', title: 'Stok tidak mencukupi!' }); return; }
             const newQty = cart[itemIndex].qty + change;
             if (newQty > 0) cart[itemIndex].qty = newQty; else cart.splice(itemIndex, 1); 
-            updateDynamicStocks(); renderProducts(products); renderCart();
+            updateDynamicStocks(); filterProducts(); renderCart(); // FIX: Gunakan filterProducts()
         }
     }
 
-    function clearCart() { cart = []; updateDynamicStocks(); renderProducts(products); renderCart(); }
+    function clearCart() { cart = []; updateDynamicStocks(); filterProducts(); renderCart(); } // FIX: Gunakan filterProducts()
 
     function renderCart() {
         const cartContainer = document.getElementById('cartItems');
@@ -738,7 +807,6 @@
                 Swal.fire('Shift Dibuka', 'Selamat bertugas!', 'success'); 
                 hideShiftModal(); 
             } else {
-                // TAMBAHAN BARU: Nampilin error asli dari backend!
                 Swal.fire('Gagal Buka Shift', result.message, 'error'); 
             }
         } catch (e) { 
@@ -1008,10 +1076,11 @@
 
     // INISIALISASI UTAMA
     document.addEventListener('DOMContentLoaded', () => { 
-        fetchAppSettings(); 
+        fetchAppSettings();
+        fetchCategories(); // FIX: Muat kategori dulu
         fetchProducts(); 
         fetchCustomers(); 
         renderCart(); 
-        checkOpenShift(); // <-- VALIDASI SHIFT JALAN DI SINI
+        checkOpenShift(); 
     });
 </script>
