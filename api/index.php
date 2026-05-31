@@ -348,12 +348,25 @@ if ($action === 'save_customer' && $_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($data['name'])) { echo json_encode(['status' => 'error', 'message' => 'Nama wajib diisi!']); exit; }
     try {
         if (empty($data['id'])) {
-            $stmt = $db->prepare("INSERT INTO customers (name, phone, address) VALUES (:name, :phone, :address)");
-            $stmt->execute([':name' => $data['name'], ':phone' => $data['phone'] ?? '', ':address' => $data['address'] ?? '']);
+            $stmt = $db->prepare("INSERT INTO customers (name, phone, address, latitude, longitude) VALUES (:name, :phone, :address, :lat, :lng)");
+            $stmt->execute([
+                ':name'    => $data['name'], 
+                ':phone'   => $data['phone'] ?? '', 
+                ':address' => $data['address'] ?? '',
+                ':lat'     => $data['latitude'] ?? null,
+                ':lng'     => $data['longitude'] ?? null
+            ]);
             echo json_encode(['status' => 'success', 'message' => "Pelanggan ditambahkan!", 'data' => ['id' => $db->lastInsertId(), 'name' => $data['name']]]);
         } else {
-            $stmt = $db->prepare("UPDATE customers SET name = :name, phone = :phone, address = :address WHERE id = :id");
-            $stmt->execute([':name' => $data['name'], ':phone' => $data['phone'] ?? '', ':address' => $data['address'] ?? '', ':id' => $data['id']]);
+            $stmt = $db->prepare("UPDATE customers SET name = :name, phone = :phone, address = :address, latitude = :lat, longitude = :lng WHERE id = :id");
+            $stmt->execute([
+                ':name'    => $data['name'], 
+                ':phone'   => $data['phone'] ?? '', 
+                ':address' => $data['address'] ?? '',
+                ':lat'     => $data['latitude'] ?? null,
+                ':lng'     => $data['longitude'] ?? null,
+                ':id'      => $data['id']
+            ]);
             echo json_encode(['status' => 'success', 'message' => "Data pelanggan diperbarui!", 'data' => ['id' => $data['id'], 'name' => $data['name']]]);
         }
     } catch (PDOException $e) { echo json_encode(['status' => 'error', 'message' => 'Gagal DB: ' . $e->getMessage()]); } exit;
