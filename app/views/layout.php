@@ -42,6 +42,12 @@
             }).catch(e => console.log("Logger failed"));
         });
     </script>
+    <link rel="manifest" href="<?= APP_URL ?>/manifest.json">
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('<?= APP_URL ?>/sw.js');
+        }
+    </script>
 </head>
 <body class="bg-slate-100 dark:bg-slate-900 text-slate-800 dark:text-slate-100 font-sans antialiased h-screen overflow-hidden flex selection:bg-indigo-500 selection:text-white transition-colors duration-300">
 

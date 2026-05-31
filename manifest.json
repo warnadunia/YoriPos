@@ -1,0 +1,16 @@
+{
+  "name": "YoriPOS Kurir & VIP",
+  "short_name": "Yori App",
+  "start_url": "/admin/?page=mobile",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#4f46e5",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/732/732221.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
