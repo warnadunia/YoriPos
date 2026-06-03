@@ -53,7 +53,16 @@
                 const result = await res.json();
                 
                 if (result.status === 'success') {
-                    window.location.reload(); // Reload biar masuk ke dashboard/POS
+                    // LOGIKA BARU: Deteksi otomatis device pakai Regex JS
+                    const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+                    if (isMobile) {
+                        // Kalau HP, langsung tembak ke URL PWA Dashboard
+                        window.location.href = '../admin/?page=mobile';
+                    } else {
+                        // Kalau PC/Laptop, tembak ke Dashboard Utama
+                        window.location.href = '../admin/?page=dashboard'; 
+                    }
                 } else {
                     Swal.fire('Gagal Login', result.message, 'error');
                 }
