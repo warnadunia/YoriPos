@@ -16,7 +16,17 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-$page = isset($_GET['page']) ? $_GET['page'] : 'dashboard';
+// KODE BARU: Deteksi Otomatis Mobile/Tablet
+$userAgent = $_SERVER['HTTP_USER_AGENT'] ?? '';
+$isMobile = preg_match('/Mobile|Android|BlackBerry|iPhone|iPad|iPod|Opera Mini|IEMobile/i', $userAgent);
+
+// Jika user baru buka root (tanpa ?page=...), arahkan sesuai devicenya!
+if (!isset($_GET['page'])) {
+    $page = $isMobile ? 'mobile' : 'dashboard';
+} else {
+    $page = $_GET['page'];
+}
+
 $pageTitle = 'YoriPOS';
 
 // 3. CEK KUNCI RUANGAN (RBAC)
