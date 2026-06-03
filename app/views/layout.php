@@ -8,7 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         tailwind.config = { darkMode: 'class', theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'], } } } }
-        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMatchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); } else { document.documentElement.classList.remove('dark'); }
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) { document.documentElement.classList.add('dark'); } else { document.documentElement.classList.remove('dark'); }
     </script>
     <style>
         .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
@@ -42,10 +42,10 @@
             }).catch(e => console.log("Logger failed"));
         });
     </script>
-    <link rel="manifest" href="<?= APP_URL ?>/manifest.json">
+    <link rel="manifest" href="../manifest.json">
     <script>
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('<?= APP_URL ?>/sw.js');
+            navigator.serviceWorker.register('../sw.js');
         }
     </script>
 </head>
@@ -93,7 +93,7 @@
                         </div>
                         <a href="#" class="block px-4 py-2.5 text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">⚙️ Pengaturan Profil</a>
                         <hr class="my-1 border-slate-100 dark:border-slate-700">
-                        <a href="<?= APP_URL ?>/api/?action=logout" class="block px-4 py-2.5 text-sm font-bold text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">🚪 Logout Sistem</a>
+                        <a href="../api/?action=logout" class="block px-4 py-2.5 text-sm font-bold text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">🚪 Logout Sistem</a>
                     </div>
                 </div>
             </div>

@@ -127,20 +127,35 @@ class SaleModel {
 
     // Fungsi tambahan untuk History Transaksi dengan Filter Tanggal
     public function getSalesData($filter = 'completed', $date = null) {
-        // Default ke hari ini jika tidak ada tanggal yang dikirim
         $date = $date ?? date('Y-m-d');
 
-        $query = "SELECT s.*, c.name as customer_name, c.phone as customer_phone FROM sales s LEFT JOIN customers c ON s.customer_id = c.id ";
-        $query .= "WHERE DATE(s.created_at) = :filter_date "; // Filter Tanggal Harian
+        // Setup dasar query
+        $query = "SELECT s.*, c.name as customer_name, c.phone as customer_phone, c.address as customer_address, c.latitude as customer_latitude, c.longitude as customer_longitude FROM sales s LEFT JOIN customers c ON s.customer_id = c.id ";
         
-        if ($filter === 'completed') { $query .= "AND s.status = 'lunas' "; } 
-        else if ($filter === 'receivable') { $query .= "AND s.payment_method = 'PIUTANG' AND s.status = 'proses' "; } 
-        else if ($filter === 'active_order') { $query .= "AND s.type = 'order' AND s.status = 'proses' "; }
+        // LOGIKA BARU: Jika minta active_order, tarik SEMUA data tanpa filter tanggal
+        if ($filter === 'active_order') { 
+            $query .= "WHERE s.type = 'order' AND s.status = 'proses' ";
+        } else {
+            // Selain active_order, tetap pakai filter tanggal
+            $query .= "WHERE DATE(s.created_at) = :filter_date ";
+            
+            if ($filter === 'completed') { 
+                $query .= "AND s.status = 'lunas' "; 
+            } else if ($filter === 'receivable') { 
+                $query .= "AND s.payment_method = 'PIUTANG' AND s.status = 'proses' "; 
+            }
+        }
         
-        $query .= "ORDER BY s.created_at DESC";
+        // Ubah jadi ASCENDING (ASC) khusus untuk antrean, biar order yang paling lama nyangkut (kemarin) ada di paling atas buat segera dikirim
+        $query .= "ORDER BY s.created_at ASC";
         
         $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':filter_date', $date);
+        
+        // Bind parameter HANYA jika querynya butuh tanggal (mencegah error PDO)
+        if ($filter !== 'active_order') {
+            $stmt->bindParam(':filter_date', $date);
+        }
+        
         $stmt->execute();
         $sales = $stmt->fetchAll(PDO::FETCH_ASSOC);
 

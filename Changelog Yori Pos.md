@@ -481,3 +481,74 @@ ALTER TABLE products ADD COLUMN category VARCHAR(100) NULL AFTER sku;
 - **Order Mutation Crash**: Memperbaiki *Fatal Error* pada `SaleModel.php` (salah panggil variabel `$this->db` menjadi `$this->conn`) yang sebelumnya menyebabkan pesanan gagal diselesaikan atau diubah menjadi Piutang.
 - **Cart Total TypeError**: Memperbaiki *error* Javascript pada `pos.php` akibat perubahan ID DOM dari `cartTotal` menjadi `payTotalDisplay` yang sempat melumpuhkan fitur keranjang.
 - **Shift Query Exception**: Menghapus filter pengecekan `user_id` pada histori transaksi saat menghitung uang laci. Perbaikan ini mencegah *crash database* yang sebelumnya terus-menerus meminta kasir memasukkan uang modal akibat struktur tabel `sales` versi lama.
+
+## [2.0.0] - 2026-06-01
+### Added
+- **PWA & Mobile Ecosystem**: Inisialisasi arsitektur PWA mandiri (Progressive Web App) dengan antarmuka yang dioptimalkan khusus untuk *smartphone*.
+- **Executive Dashboard Mobile** (`mobile.php`): Antarmuka beranda PWA yang cerdas, mampu menghitung dan menampilkan statistik operasional *real-time* (Total Penjualan, Pesanan Aktif, Rincian Pemasukan Kasir, dan Pengeluaran Harian) secara *client-side* untuk meringankan beban server.
+- **VIP Mobile POS** (`mobile_pos.php`): Modul Kasir eksklusif layar sentuh vertikal dengan fitur *Sticky Checkout*, *Scrollable Cart*, dan integrasi penuh dengan antarmuka Pembayaran (CASH/QRIS/Transfer), fitur *Buat Pesanan*, dan *Piutang*.
+- **Courier Delivery App** (`mobile_delivery.php`): Aplikasi kurir internal untuk memantau daftar kiriman (*Delivery Order*). Dilengkapi Modal Detail Layar Penuh (Info Pelanggan, Rincian Menu, Total Tagihan) dan tombol interaktif yang terhubung langsung ke WhatsApp pembeli.
+- **Sistem Pelacakan Lokasi Pelanggan (GPS)**:
+  - Ekspansi *database* TiDB: Penambahan kolom `latitude` dan `longitude` pada tabel `customers`.
+  - Integrasi **HTML5 Geolocation** pada UI Master Pelanggan (`customers.php`) untuk mendeteksi dan mengunci koordinat pelanggan baru secara presisi hanya dengan satu klik.
+  - Penambahan tombol pintar "📍 Lihat Peta" di tabel pelanggan yang akan membuka rute navigasi langsung di aplikasi Google Maps.
+- **API Payload Expansion**: Modifikasi `api/index.php` pada *method* `save_customer` untuk menerima dan menyimpan parameter koordinat peta (Lat/Lng) ke dalam *database*.
+
+### Changed
+- **Smart Routing Bypass (`admin/index.php`)**: Memodifikasi *Main Router* untuk melakukan *bypass* terhadap rendering *layout* utama Admin (`layout.php`) setiap kali pengguna mengakses rute PWA (`mobile`, `mobile_pos`, `mobile_delivery`). Hal ini secara permanen mengatasi *bug* kaca transparan (*invisible overlay*) akibat tumpukan *sidebar* admin di layar *smartphone*.
+- **Enterprise Sidebar Overhaul (`sidebar.php`)**: Merombak total kerangka navigasi *sidebar* menjadi tema *Premium Dark Mode*. Mengimplementasikan *SVG Vector Icons* murni, efek pendar (*glow*) dinamis pada menu aktif, dan restrukturisasi menu menjadi 5 kelompok logis.
+- **Navigasi Master Pelanggan**: Mengintegrasikan rute halaman *Master Pelanggan* ke dalam *Sidebar* utama untuk kemudahan akses administrator.
+
+### Fixed
+- **CORS & Manifest Pathing**: Memperbaiki isu kegagalan instalasi PWA dengan menerapkan *Absolute Root Path* (`/manifest.json` dan `/sw.js`). Ini mencegah *error 404* dan pemblokiran lintas domain (CORS) ketika aplikasi berjalan di Localhost Laragon maupun Vercel.
+- **Ghost Modal Exception**: Menghapus parameter kelas `opacity-0` pada elemen transisi antarmuka Mobile POS untuk menyelesaikan *bug* layar tidak bisa diklik akibat modal yang bersembunyi namun secara fisik menutupi dokumen HTML.
+
+## [2.1.0] - 2026-06-02
+
+### Added
+- **POS Checkout Modal (Web Admin)**: Integrasi antarmuka *Modal Pembayaran Lunas* gaya VIP Kasir ke halaman `orders.php`. Fitur ini mencakup kalkulator uang kembalian *real-time* dan opsi masukan "Uang Pas".
+- **Dynamic Payment Settings**: Modul `mobile_delivery.php` dan `orders.php` sekarang terintegrasi penuh untuk menarik data *list* rekening bank dan gambar QRIS secara dinamis dari tabel `settings` via *endpoint* `get_settings`.
+- **Kamera Lingkungan Kurir**: Mengimplementasikan atribut HTML5 `capture="environment"` pada input unggah foto bukti transfer/QRIS di PWA Kurir agar *browser* langsung memanggil kamera belakang gawai pelanggan.
+- **Auto-Compress Image Payload**: Menambahkan modul mini pemrosesan *Canvas* untuk mengompres dimensi foto (maks. 600px) dan mengubahnya ke representasi *Base64* sebelum di-POST ke server (meningkatkan kecepatan *upload* dan menghemat *storage*).
+
+### Changed
+- **UI Kurir Terpadu (Expanded Card)**: Merombak tampilan `mobile_delivery.php` menggunakan pendekatan *Accordion Card*. Rincian menu (nama item, kuantitas, harga) kini tertampil langsung saat *card* diperluas, menghilangkan ketergantungan pada *popup modal*.
+- **Filter Visibilitas Kurir**: Mengaplikasikan saringan `.filter(ord => ord.invoice_number.startsWith('ORD-'))` di *frontend* kurir. Sistem kini secara otomatis menyembunyikan pesanan yang telah dimutasi ke Faktur Piutang (`INV-`) atau Kwitansi Lunas (`KWI-`).
+- **Standardisasi Payload Mutasi**: Mengubah arsitektur *fetch API* kurir dari `FormData` mentah menjadi JSON terstruktur yang seragam dengan `orders.php` untuk menembak *endpoint* tunggal `action=complete_order`.
+
+### Fixed
+- **Universal Google Maps Link**: Memperbaiki format *Deep Link* navigasi Google Maps (`http://googleusercontent.com/maps.google.com/`) pada aplikasi kurir agar titik *latitude* dan *longitude* pelanggan terbuka dengan sempurna tanpa hambatan API Key.
+- **Ghost Modal Exception**: Mengatasi isu *bug* kotak dialog yang tidak kasat mata (`opacity-0`) dan memoles penumpukan `z-index` yang membuat Modal Pembayaran di `orders.php` gagal merender konten antarmukanya.
+- **JSON Parsing Crash**: Meredam bentrokan *Unexpected end of JSON input* dengan memastikan konsistensi penangkapan respon server dan penanganan galat *rawText* apabila PHP memicu *Fatal Error*.
+
+## [2.2.0] - 2026-06-02
+
+### Added
+- **PWA Transaksi Lunas (`mobile_history.php`)**: Membawa fitur kalender *swipe* horizontal dan daftar transaksi berdesain *compact card* ke ekosistem *mobile*, lengkap dengan lencana warna metode pembayaran dan tombol pintas cetak struk.
+- **PWA Monitoring Piutang (`mobile_receivables.php`)**: Menambahkan antarmuka khusus piutang dengan aksen warna merah. Dilengkapi fitur *Accordion Card* untuk melihat rincian pesanan tanpa pindah halaman dan tombol pelunasan instan.
+- **PWA Pengeluaran Opex (`mobile_expenses.php`)**: Mengadaptasi halaman manajemen beban operasional ke layar sentuh dengan aksen warna oranye. Form pencatatan kini menggunakan pendekatan *Bottom Sheet Modal* bergaya premium.
+- **VIP Executive Dashboard (`mobile.php`)**: Menambahkan fitur *branding* cerdas yang menarik Logo Toko secara otomatis. Dilengkapi dengan mesin sapaan waktu otomatis (Pagi/Siang/Sore/Malam) dan dua tombol aksi cepat rahasia (*+ Order & + Pengeluaran*) yang hanya terlihat oleh akses tingkat *Super Admin/Owner*.
+
+### Changed
+- **Smart Bottom Navigation (`bottomnav.php`)**: Merombak total arsitektur menu navigasi bawah dari *hardcoded HTML* menjadi *Array Mapping* di PHP.
+- **Dynamic Role Navigation**: Menu navigasi kini bereaksi cerdas terhadap hak akses (`$_SESSION['permissions']`). Kurir hanya mendapatkan 4 menu proporsional, sedangkan Admin mendapatkan 6 menu dengan lebar tombol yang otomatis menyesuaikan (*flex justify-evenly*).
+- **PWA Routing Bypass (`admin/index.php`)**: Mendaftarkan rute `mobile_history`, `mobile_receivables`, dan `mobile_expenses` ke dalam pengecualian *layouting* admin agar tidak berbenturan dengan struktur *sidebar* PC.
+
+### Fixed
+- **Include Path Fatal Error**: Mengatasi isu *Failed to open stream* saat pemanggilan komponen `bottomnav.php` lintas direktori dengan mengimplementasikan standar konstan ajaib PHP `__DIR__` pada seluruh rute aplikasi *mobile*.
+
+## [2.2.0] - 2026-06-02
+
+### Added
+- **PWA Transaksi Lunas (`mobile_history.php`)**: Membawa fitur kalender *swipe* horizontal dan daftar transaksi berdesain *compact card* ke ekosistem *mobile*, lengkap dengan lencana warna metode pembayaran dan tombol pintas cetak struk.
+- **PWA Monitoring Piutang (`mobile_receivables.php`)**: Menambahkan antarmuka khusus piutang dengan aksen warna merah. Dilengkapi fitur *Accordion Card* untuk melihat rincian pesanan tanpa pindah halaman dan tombol pelunasan instan.
+- **PWA Pengeluaran Opex (`mobile_expenses.php`)**: Mengadaptasi halaman manajemen beban operasional ke layar sentuh dengan aksen warna oranye. Form pencatatan kini menggunakan pendekatan *Bottom Sheet Modal* bergaya premium.
+- **VIP Executive Dashboard (`mobile.php`)**: Menambahkan fitur *branding* cerdas yang menarik Logo Toko secara otomatis. Dilengkapi dengan mesin sapaan waktu otomatis (Pagi/Siang/Sore/Malam) dan dua tombol aksi cepat rahasia (*+ Order & + Pengeluaran*) yang hanya terlihat oleh akses tingkat *Super Admin/Owner*.
+
+### Changed
+- **Smart Bottom Navigation (`bottomnav.php`)**: Merombak total arsitektur menu navigasi bawah dari *hardcoded HTML* menjadi *Array Mapping* di PHP.
+- **Dynamic Role Navigation**: Menu navigasi kini bereaksi cerdas terhadap hak akses (`$_SESSION['permissions']`). Kurir hanya mendapatkan 4 menu proporsional, sedangkan Admin mendapatkan 6 menu dengan lebar tombol yang otomatis menyesuaikan (*flex justify-evenly*).
+- **PWA Routing Bypass (`admin/index.php`)**: Mendaftarkan rute `mobile_history`, `mobile_receivables`, dan `mobile_expenses` ke dalam pengecualian *layouting* admin agar tidak berbenturan dengan struktur *sidebar* PC.
+
+### Fixed
+- **Include Path Fatal Error**: Mengatasi isu *Failed to open stream* saat pemanggilan komponen `bottomnav.php` lintas direktori dengan mengimplementasikan standar konstan ajaib PHP `__DIR__` pada seluruh rute aplikasi *mobile*.

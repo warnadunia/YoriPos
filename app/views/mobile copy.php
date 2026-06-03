@@ -2,88 +2,51 @@
 // Cek hak akses untuk tombol VIP Add Order
 $perms = $_SESSION['permissions'] ?? [];
 $isSuperAdmin = in_array('settings', $perms); // Cuma Super Admin yang punya menu settings
-
-// Tarik Pengaturan Toko dari index.php
-$storeName = $appSettings['store_name'] ?? 'Yori App';
-$storeLogo = $appSettings['store_logo'] ?? '';
-
-// Logika Sapaan Waktu Otomatis
-date_default_timezone_set('Asia/Jakarta');
-$hour = (int)date('H');
-if ($hour >= 5 && $hour < 11) { $greeting = 'Selamat pagi'; }
-elseif ($hour >= 11 && $hour < 15) { $greeting = 'Selamat siang'; }
-elseif ($hour >= 15 && $hour < 18) { $greeting = 'Selamat sore'; }
-else { $greeting = 'Selamat malam'; }
-
-// Nama User yang Login
-$userName = $_SESSION['username'] ?? 'Pengguna';
 ?>
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title><?= $storeName ?> - Dashboard Mobile</title>
+    <title>Yori App - Dashboard Mobile</title>
+    <!-- FIX: Panggil langsung dari root / -->
     <link rel="manifest" href="/manifest.json">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
+        // FIX: Panggil sw.js langsung dari root /
         if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js'); }
     </script>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased selection:bg-indigo-100 selection:text-indigo-900 pb-24"> 
-    
+    <!-- Smart Header -->
     <div class="bg-indigo-600 rounded-b-3xl shadow-lg relative overflow-hidden z-20">
+        <!-- Dekorasi Background -->
         <div class="absolute top-0 right-0 opacity-10 scale-150 transform translate-x-5 -translate-y-5 pointer-events-none">
             <svg class="w-40 h-40 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3z"></path></svg>
         </div>
         
-        <div class="px-6 pt-8 pb-6 relative z-10">
-            <div class="flex justify-between items-start">
-                <div class="flex items-center gap-3">
-                    <?php if($storeLogo): ?>
-                        <img src="<?= $storeLogo ?>" alt="Logo" class="w-11 h-11 rounded-full object-cover border-2 border-white/50 shadow-sm">
-                    <?php else: ?>
-                        <div class="w-11 h-11 rounded-full bg-white/20 flex justify-center items-center text-white font-black text-lg border-2 border-white/50 shadow-sm">
-                            <?= strtoupper(substr($storeName, 0, 1)) ?>
-                        </div>
-                    <?php endif; ?>
-                    
-                    <div>
-                        <h1 class="text-xl font-black text-white tracking-wide leading-tight"><?= $storeName ?></h1>
-                        <p class="text-indigo-200 text-[10px] uppercase font-bold tracking-widest mt-0.5">Executive Dashboard</p>
-                    </div>
-                </div>
-                <a href="../api/?action=logout" class="w-10 h-10 bg-white/10 hover:bg-white/20 active:scale-95 rounded-full flex justify-center items-center text-white transition-all backdrop-blur-sm">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                </a>
+        <div class="px-6 pt-8 pb-4 relative z-10 flex justify-between items-center">
+            <div>
+                <h1 class="text-2xl font-black text-white tracking-wide">Yori App</h1>
+                <p class="text-indigo-200 text-xs mt-0.5 font-medium">Executive Dashboard</p>
             </div>
-            
-            <div class="mt-7">
-                <h2 class="text-indigo-100 text-sm font-medium mb-0.5"><?= $greeting ?>,</h2>
-                <p class="text-white text-2xl font-black truncate"><?= $userName ?> 👋</p>
-            </div>
+            <!-- Tombol Logout -->
+            <a href="../api/?action=logout" class="w-10 h-10 bg-white/10 hover:bg-white/20 active:scale-95 rounded-full flex justify-center items-center text-white transition-all backdrop-blur-sm">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+            </a>
         </div>
+        
+        
     </div>
 
-    <?php if($isSuperAdmin): ?>
-    <div class="px-5 mt-5 max-w-md mx-auto relative z-10 flex gap-3">
-        <a href="?page=mobile_pos" class="flex-1 bg-indigo-600 text-white font-bold py-3 rounded-2xl flex flex-col items-center justify-center gap-1 shadow-sm active:scale-95 transition-transform border border-indigo-500">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
-            <span class="text-xs tracking-wide">Order</span>
-        </a>
-        <a href="?page=mobile_expenses" class="flex-1 bg-orange-500 text-white font-bold py-3 rounded-2xl flex flex-col items-center justify-center gap-1 shadow-sm active:scale-95 transition-transform border border-orange-400">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
-            <span class="text-xs tracking-wide">Pengeluaran</span>
-        </a>
-    </div>
-    <?php endif; ?>
-
-    <div class="p-5 max-w-md mx-auto relative z-10 space-y-4 <?= !$isSuperAdmin ? 'mt-1' : '' ?>">
+    <!-- Dashboard Stats Container -->
+    <div class="p-5 max-w-md mx-auto relative z-10 -mt-2 space-y-4">
         <div class="flex justify-between items-end mb-2 px-1">
             <h2 class="font-bold text-slate-800 text-sm">Ringkasan Hari Ini</h2>
             <p class="text-xs text-indigo-600 font-bold" id="todayDate">Hari ini</p>
         </div>
         
+        <!-- Grid Penjualan & Order -->
         <div class="grid grid-cols-2 gap-4">
             <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
                 <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Penjualan</p>
@@ -97,6 +60,7 @@ $userName = $_SESSION['username'] ?? 'Pengguna';
             </div>
         </div>
 
+        <!-- Detail Saldo Rekening/QRIS -->
         <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
             <div class="px-4 py-3 bg-slate-50 border-b border-slate-100">
                 <h3 class="font-bold text-slate-700 text-xs uppercase tracking-wider">Pemasukan Kasir</h3>
@@ -126,6 +90,7 @@ $userName = $_SESSION['username'] ?? 'Pengguna';
             </div>
         </div>
 
+        <!-- Pengeluaran -->
         <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex justify-between items-center">
             <div>
                 <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Pengeluaran (Expenses)</p>
@@ -136,9 +101,8 @@ $userName = $_SESSION['username'] ?? 'Pengguna';
             </div>
         </div>
     </div>
-    
     <?php include 'components/bottomnav.php'; ?>
-    
+    <!-- JS LOGIC UNTUK AMBIL DATA STATISTIK SAKTI -->
     <script>
         const formatRupiah = (number) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number);
         
@@ -147,8 +111,10 @@ $userName = $_SESSION['username'] ?? 'Pengguna';
 
         async function loadDashboardStats() {
             try {
+                // Ambil string tanggal hari ini (YYYY-MM-DD) dikunci pakai Timezone WIB biar akurat!
                 const todayStr = new Date(new Date().toLocaleString("en-US", {timeZone: "Asia/Jakarta"})).toISOString().split('T')[0];
 
+                // Trik Sakti JS: Tembak 3 API barengan, gak peduli error salah satunya
                 const [resTrx, resOrd, resExp] = await Promise.all([
                     fetch('../api/?action=get_transactions').catch(() => ({json: () => ({status: 'error'})})),
                     fetch('../api/?action=get_orders').catch(() => ({json: () => ({status: 'error'})})),
@@ -159,6 +125,7 @@ $userName = $_SESSION['username'] ?? 'Pengguna';
                 const dataOrd = await resOrd.json();
                 const dataExp = await resExp.json();
 
+                // 1. Kalkulasi Transaksi (Penjualan Selesai)
                 let totalCash = 0, totalQris = 0, totalTransfer = 0, totalSales = 0, trxCount = 0;
                 if(dataTrx.status === 'success') {
                     const todayTrx = dataTrx.data.filter(t => t.created_at && t.created_at.startsWith(todayStr));
@@ -172,6 +139,7 @@ $userName = $_SESSION['username'] ?? 'Pengguna';
                     });
                 }
 
+                // 2. Kalkulasi Pesanan Aktif (Belum selesai / Antre)
                 let totalOrderAmount = 0, orderCount = 0;
                 if(dataOrd.status === 'success') {
                     const todayOrd = dataOrd.data.filter(o => o.created_at && o.created_at.startsWith(todayStr));
@@ -179,8 +147,10 @@ $userName = $_SESSION['username'] ?? 'Pengguna';
                     todayOrd.forEach(o => { totalOrderAmount += parseFloat(o.total_amount || 0); });
                 }
 
+                // 3. Kalkulasi Pengeluaran
                 let totalExpenses = 0;
                 if(dataExp.status === 'success') {
+                    // Cari tanggal di field expense_date atau created_at
                     const todayExp = dataExp.data.filter(e => {
                         const dateField = e.expense_date || e.created_at || '';
                         return dateField.startsWith(todayStr);
@@ -188,6 +158,7 @@ $userName = $_SESSION['username'] ?? 'Pengguna';
                     todayExp.forEach(e => { totalExpenses += parseFloat(e.amount || 0); });
                 }
 
+                // Tembak Data Ke UI
                 document.getElementById('statPenjualan').innerText = formatRupiah(totalSales);
                 document.getElementById('statTrxCount').innerText = trxCount;
                 
@@ -202,6 +173,7 @@ $userName = $_SESSION['username'] ?? 'Pengguna';
 
             } catch (error) {
                 console.error('Gagal memuat statistik:', error);
+                // Fallback kalau server ambyar
                 ['statPenjualan','statCash','statQris','statTransfer','statPesanan','statExpenses'].forEach(id => document.getElementById(id).innerText = 'Rp 0');
             }
         }

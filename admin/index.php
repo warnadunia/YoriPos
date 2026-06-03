@@ -31,18 +31,27 @@ $page_mapping = [
     'transactions' => 'transactions',
     'receivables'  => 'transactions',
     'orders'       => 'transactions',
+    'customers'    => 'transactions',
     'expenses'     => 'transactions',
     'report_pl'    => 'dashboard', 
     'print_pl'     => 'dashboard',
     'closing'      => 'settings',
     'system_logs'  => 'settings',
     'settings'     => 'settings',
-    'users'        => 'users'
+    'users'        => 'users',
+    
+    // RUTE KHUSUS PWA MOBILE (Bypass Kunci)
+    'mobile'             => '',
+    'mobile_pos'         => '',
+    'mobile_delivery'    => '',
+    'mobile_history'     => '',
+    'mobile_receivables' => '',
+    'mobile_expenses'    => ''
 ];
 
 $required_permission = $page_mapping[$page] ?? '';
 
-// Kalau halamannya butuh kunci, tapi *user* nggak punya kuncinya: TENDANG!
+// Kalau halamannya butuh kunci, tapi user nggak punya kuncinya: TENDANG!
 if ($required_permission && !in_array($required_permission, $permissions)) {
     die("
         <div style='text-align:center; padding:100px; font-family:sans-serif; background:#f8fafc; height:100vh;'>
@@ -54,79 +63,50 @@ if ($required_permission && !in_array($required_permission, $permissions)) {
     ");
 }
 
-// 4. JIKA AMAN, RENDER HALAMAN SEPERTI BIASA
+// 4. DAFTAR RUANGAN HALAMAN
 $contentFile = '';
-
 switch ($page) {
-    case 'dashboard': 
-        $contentFile = __DIR__ . '/../app/views/admin/dashboard.php'; 
-        $pageTitle = 'Dashboard Overview';
-        break;
-    case 'pos': 
-        $contentFile = __DIR__ . '/../app/views/pos.php'; 
-        $pageTitle = 'Mesin Kasir (POS)';
-        break;
-    case 'menus':
-        $contentFile = __DIR__ . '/../app/views/admin/menus.php';
-        $pageTitle = 'Master Menu POS';
-        break;
-    case 'products': 
-        $contentFile = __DIR__ . '/../app/views/admin/products.php'; 
-        $pageTitle = 'Master Produk';
-        break;
-    case 'categories': 
-        $contentFile = __DIR__ . '/../app/views/admin/categories.php'; 
-        $pageTitle = 'Master Kategori';
-        break;
-    case 'stocks': 
-        $contentFile = __DIR__ . '/../app/views/admin/stocks.php'; 
-        $pageTitle = 'Stok Masuk (FIFO)';
-        break;
-    case 'transactions': 
-        $contentFile = __DIR__ . '/../app/views/admin/transactions.php'; 
-        $pageTitle = 'Riwayat Transaksi';
-        break;
-    case 'receivables': 
-        $contentFile = __DIR__ . '/../app/views/admin/receivables.php'; 
-        $pageTitle = 'Monitoring Piutang';
-        break;
-    case 'expenses': 
-        $contentFile = __DIR__ . '/../app/views/admin/expenses.php'; 
-        $pageTitle = 'Pengeluaran Operasional';
-        break;
-    case 'report_pl':
-        $contentFile = __DIR__ . '/../app/views/admin/report_pl.php'; 
-        $pageTitle = 'Laporan Laba Rugi (P&L)';
-        break;
-    case 'print_pl':
-        require_once __DIR__ . '/../app/views/admin/print_pl.php';
-        exit;
-    case 'orders': 
-        $contentFile = __DIR__ . '/../app/views/admin/orders.php'; 
-        $pageTitle = 'Pesanan & Delivery';
-        break;
-    case 'settings': 
-        $contentFile = __DIR__ . '/../app/views/admin/settings.php'; 
-        $pageTitle = 'Pengaturan Toko';
-        break;
-    case 'closing':
-        $contentFile = __DIR__ . '/../app/views/admin/closing.php'; 
-        $pageTitle = 'Tutup Buku Bulanan';
-        break;
-    case 'system_logs': 
-        $contentFile = __DIR__ . '/../app/views/admin/logs.php'; 
-        $pageTitle = 'System Error Logs';
-        break;
-    case 'users': 
-        $contentFile = __DIR__ . '/../app/views/admin/users.php'; 
-        $pageTitle = 'Kelola Staf & Akses';
-        break;
-    default: 
-        $contentFile = __DIR__ . '/../app/views/admin/dashboard.php'; 
-        $pageTitle = 'Dashboard Overview';
-        break;
+    case 'dashboard': $contentFile = __DIR__ . '/../app/views/admin/dashboard.php'; $pageTitle = 'Dashboard Overview'; break;
+    case 'pos': $contentFile = __DIR__ . '/../app/views/pos.php'; $pageTitle = 'Mesin Kasir (POS)'; break;
+    case 'menus': $contentFile = __DIR__ . '/../app/views/admin/menus.php'; $pageTitle = 'Master Menu POS'; break;
+    case 'products': $contentFile = __DIR__ . '/../app/views/admin/products.php'; $pageTitle = 'Master Produk'; break;
+    case 'categories': $contentFile = __DIR__ . '/../app/views/admin/categories.php'; $pageTitle = 'Master Kategori'; break;
+    case 'stocks': $contentFile = __DIR__ . '/../app/views/admin/stocks.php'; $pageTitle = 'Stok Masuk (FIFO)'; break;
+    case 'transactions': $contentFile = __DIR__ . '/../app/views/admin/transactions.php'; $pageTitle = 'Riwayat Transaksi'; break;
+    case 'receivables': $contentFile = __DIR__ . '/../app/views/admin/receivables.php'; $pageTitle = 'Monitoring Piutang'; break;
+    case 'expenses': $contentFile = __DIR__ . '/../app/views/admin/expenses.php'; $pageTitle = 'Pengeluaran Operasional'; break;
+    case 'report_pl': $contentFile = __DIR__ . '/../app/views/admin/report_pl.php'; $pageTitle = 'Laporan Laba Rugi (P&L)'; break;
+    case 'print_pl': require_once __DIR__ . '/../app/views/admin/print_pl.php'; exit;
+    case 'orders': $contentFile = __DIR__ . '/../app/views/admin/orders.php'; $pageTitle = 'Pesanan & Delivery'; break;
+    case 'customers': $contentFile = __DIR__ . '/../app/views/admin/customers.php'; $pageTitle = 'Master Pelanggan & GPS'; break;
+    case 'settings': $contentFile = __DIR__ . '/../app/views/admin/settings.php'; $pageTitle = 'Pengaturan Toko'; break;
+    case 'closing': $contentFile = __DIR__ . '/../app/views/admin/closing.php'; $pageTitle = 'Tutup Buku Bulanan'; break;
+    case 'system_logs': $contentFile = __DIR__ . '/../app/views/admin/logs.php'; $pageTitle = 'System Error Logs'; break;
+    case 'users': $contentFile = __DIR__ . '/../app/views/admin/users.php'; $pageTitle = 'Kelola Staf & Akses'; break;
+    
+    // HALAMAN PWA
+    case 'mobile': $contentFile = __DIR__ . '/../app/views/mobile.php'; break;
+    case 'mobile_pos': $contentFile = __DIR__ . '/../app/views/mobile_pos.php'; break;
+    case 'mobile_delivery': $contentFile = __DIR__ . '/../app/views/mobile_delivery.php'; break;
+    case 'mobile_history': $contentFile = __DIR__ . '/../app/views/mobile_history.php'; break;
+    case 'mobile_receivables': $contentFile = __DIR__ . '/../app/views/mobile_receivables.php'; break;
+    case 'mobile_expenses': $contentFile = __DIR__ . '/../app/views/mobile_expenses.php'; break;
+    
+    default: $contentFile = __DIR__ . '/../app/views/admin/dashboard.php'; $pageTitle = 'Dashboard Overview'; break;
 }
 
+// 5. EKSEKUSI TAMPILAN (RENDER)
+// FIX: Daftarkan semua routing mobile ke array bypass layout ini!
+$pwa_pages = ['mobile', 'mobile_pos', 'mobile_delivery', 'mobile_history', 'mobile_receivables', 'mobile_expenses'];
+
+if (in_array($page, $pwa_pages)) {
+    if (file_exists($contentFile)) {
+        require_once $contentFile; 
+        exit; // <--- HENTIKAN PROSES DI SINI AGAR LAYOUT ADMIN TIDAK IKUT KE-LOAD!
+    }
+}
+
+// RENDER UNTUK PC / DASHBOARD ADMIN
 if (file_exists($contentFile)) {
     require_once __DIR__ . '/../app/views/layout.php';
 } else {

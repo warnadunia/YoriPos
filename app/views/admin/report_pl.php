@@ -130,7 +130,7 @@
         const start = document.getElementById('filterStart').value;
         const end = document.getElementById('filterEnd').value;
         // Buka halaman di tab baru dengan lemparan parameter tanggal
-        window.open(`<?= APP_URL ?>/admin/?page=print_pl&start=${start}&end=${end}`, '_blank');
+        window.open(`../api//admin/?page=print_pl&start=${start}&end=${end}`, '_blank');
     }
 
     document.addEventListener('DOMContentLoaded', () => {

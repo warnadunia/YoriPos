@@ -68,7 +68,12 @@ if(!in_array('settings', $perms)) {
         </button>
     </div>
 
-    <div id="productModal" class="fixed inset-0 bg-slate-50 z-50 hidden flex-col transition-transform transform translate-y-full">
+    <!-- ========================================== -->
+    <!-- SEMUA MODAL DI BAWAH INI (VERSI ANTI-GHOIB) -->
+    <!-- ========================================== -->
+
+    <!-- Modal 1: Pilih Produk (FULL SCREEN MOBILE) -->
+    <div id="productModal" class="fixed inset-0 bg-slate-50 z-50 hidden flex-col transition-transform transform translate-y-full duration-300">
         <div class="bg-white px-5 py-4 border-b border-slate-200 flex justify-between items-center shadow-sm">
             <h3 class="text-lg font-black text-slate-800">Pilih Menu</h3>
             <button onclick="closeProductModal()" class="text-slate-400 hover:text-red-500 bg-slate-100 p-2 rounded-full active:scale-90 transition-all">
@@ -80,6 +85,7 @@ if(!in_array('settings', $perms)) {
                 <span class="absolute inset-y-0 left-0 pl-3 flex items-center text-slate-400"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg></span>
                 <input type="text" id="searchProductInput" oninput="filterProducts()" placeholder="Cari nama menu..." class="w-full bg-slate-100 border border-slate-200 rounded-xl pl-10 pr-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm font-bold transition-all">
             </div>
+            <!-- Filter Kategori Kapsul -->
             <div id="categoryFilterContainer" class="flex gap-2 overflow-x-auto hide-scrollbar pt-3 pb-1"></div>
         </div>
         <div class="flex-1 overflow-y-auto p-4 bg-slate-50 flex flex-col gap-3" id="mobileProductList">
@@ -87,12 +93,13 @@ if(!in_array('settings', $perms)) {
         </div>
     </div>
 
-    <div id="customerSelectModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[70] hidden flex items-end sm:items-center justify-center transition-opacity opacity-0">
-        <div class="bg-white w-full sm:w-[500px] sm:rounded-3xl rounded-t-3xl shadow-2xl overflow-hidden transform transition-all translate-y-full sm:translate-y-0 flex flex-col max-h-[90vh]" id="customerSelectModalContent">
-            <div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
+    <!-- MODAL CUSTOMER (Pilih & Tambah) -->
+    <div id="customerSelectModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[70] hidden flex items-end justify-center">
+        <div class="bg-white w-full rounded-t-[2rem] shadow-2xl overflow-hidden transform transition-transform translate-y-full duration-300 flex flex-col max-h-[90vh]" id="customerSelectModalContent">
+            <div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50 sticky top-0 z-10">
                 <h3 class="text-lg font-bold text-slate-800">Pilih Konsumen</h3>
-                <button onclick="closeCustomerSelectModal()" class="text-slate-400 hover:text-slate-600 transition-colors">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                <button onclick="closeCustomerSelectModal()" class="text-slate-400 hover:text-slate-600 transition-colors bg-slate-200 p-1.5 rounded-full">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
             <div class="p-4 bg-white border-b border-slate-100 flex gap-2">
@@ -103,11 +110,12 @@ if(!in_array('settings', $perms)) {
         </div>
     </div>
 
-    <div id="customerModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[80] hidden flex items-center justify-center transition-opacity opacity-0">
-        <div class="bg-white w-full max-w-sm mx-4 rounded-3xl shadow-2xl overflow-hidden transform transition-all scale-95" id="customerModalContent">
+    <!-- Modal Tambah Customer -->
+    <div id="customerModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[80] hidden flex items-center justify-center">
+        <div class="bg-white w-full max-w-sm mx-4 rounded-3xl shadow-2xl overflow-hidden transform transition-all scale-95 opacity-0 duration-300" id="customerModalContent">
             <div class="px-6 py-4 border-b border-slate-200 flex justify-between items-center bg-slate-50">
                 <h3 class="text-lg font-bold text-slate-800">Tambah Pelanggan</h3>
-                <button onclick="closeCustomerModal()" class="text-slate-400"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
+                <button onclick="closeCustomerModal()" class="text-slate-400 bg-slate-200 p-1.5 rounded-full"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
             </div>
             <div class="p-5 space-y-4">
                 <div><label class="block text-xs font-bold text-slate-500 mb-1">Nama Lengkap</label><input type="text" id="custName" class="w-full px-4 py-2 bg-slate-50 border border-slate-200 rounded-xl outline-none focus:ring-2 focus:ring-indigo-500 text-sm"></div>
@@ -121,8 +129,9 @@ if(!in_array('settings', $perms)) {
         </div>
     </div>
 
-    <div id="checkoutMenuModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[60] hidden flex items-end justify-center transition-opacity opacity-0">
-        <div class="bg-white w-full rounded-t-[2rem] shadow-2xl overflow-hidden transform transition-all translate-y-full flex flex-col max-h-[90vh]" id="checkoutMenuModalContent">
+    <!-- MODAL CHECKOUT MENU (LEVEL 1) -->
+    <div id="checkoutMenuModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[60] hidden flex items-end justify-center">
+        <div class="bg-white w-full rounded-t-[2rem] shadow-2xl overflow-hidden transform transition-transform translate-y-full duration-300 flex flex-col max-h-[90vh]" id="checkoutMenuModalContent">
             <div class="px-6 py-5 border-b border-slate-200 flex items-center justify-between sticky top-0 bg-white z-10">
                 <h3 class="text-xl font-black text-slate-800">Checkout</h3>
                 <button onclick="closeCheckoutMenuModal()" class="text-slate-400 bg-slate-100 p-2 rounded-full active:scale-90 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg></button>
@@ -163,13 +172,14 @@ if(!in_array('settings', $perms)) {
         </div>
     </div>
 
-    <div id="paymentModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[70] hidden flex items-end justify-center transition-opacity opacity-0">
-        <div class="bg-white w-full rounded-t-[2rem] shadow-2xl overflow-hidden transform transition-all translate-y-full max-h-[95vh] overflow-y-auto" id="paymentModalContent">
+    <!-- MODAL PEMBAYARAN (LEVEL 2) -->
+    <div id="paymentModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[70] hidden flex items-end justify-center">
+        <div class="bg-white w-full rounded-t-[2rem] shadow-2xl overflow-hidden transform transition-transform translate-y-full duration-300 max-h-[95vh] flex flex-col" id="paymentModalContent">
             <div class="px-6 py-5 border-b border-slate-200 flex items-center gap-3 sticky top-0 bg-white z-10">
                 <button onclick="backToCheckoutMenu()" class="text-slate-500 bg-slate-100 p-2 rounded-full active:scale-90 transition-all"><svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg></button>
                 <h3 class="text-xl font-black text-slate-800">Pembayaran</h3>
             </div>
-            <div class="p-6 space-y-6">
+            <div class="p-6 space-y-6 overflow-y-auto">
                 <div class="text-center bg-slate-50 py-4 rounded-2xl border border-slate-100">
                     <p class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-1">Total Tagihan</p>
                     <p class="text-4xl font-black text-emerald-500" id="payTotalDisplay2">Rp 0</p>
@@ -197,10 +207,36 @@ if(!in_array('settings', $perms)) {
                         <input type="text" id="inputChange" readonly class="w-full px-4 py-3 bg-red-50 border border-red-100 rounded-xl font-black text-xl text-red-600 outline-none" value="Rp 0">
                     </div>
                 </div>
-                <div id="nonCashSection" class="hidden space-y-4 pt-2">
-                    <p class="text-xs text-center text-slate-500 bg-slate-100 p-3 rounded-xl font-bold">Instruksi pembayaran QRIS/Transfer dapat dilihat di admin web utama. Silakan upload bukti bayar di bawah.</p>
-                    <input type="file" id="inputPaymentProof" accept="image/*" capture="environment" class="w-full text-sm bg-slate-50 border border-slate-200 rounded-xl p-2 font-bold">
-                    <input type="hidden" id="proofBase64" value="">
+                <div id="nonCashSection" class="hidden space-y-5 pt-4 border-t border-slate-100">
+                    <div id="qrisView" class="hidden flex-col gap-3">
+                        <p class="text-sm font-bold text-slate-700">Pilih QRIS Tujuan</p>
+                        <div id="qrisListContainer" class="flex flex-wrap gap-3">
+                            <p class="text-sm text-slate-400 italic">Memuat data QRIS...</p>
+                        </div>
+                        <div class="flex justify-center mt-2">
+                            <div class="bg-white p-3 rounded-2xl shadow-sm border border-slate-200">
+                                <img id="qrisDisplayImage" src="" alt="QRIS" class="w-48 h-48 object-contain rounded-lg">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="transferView" class="hidden flex-col gap-3">
+                        <p class="text-sm font-bold text-slate-700">Pilih Rekening Tujuan</p>
+                        <div id="transferListContainer" class="space-y-2 max-h-48 overflow-y-auto pr-1">
+                            <p class="text-sm text-slate-400 italic">Memuat data rekening...</p>
+                        </div>
+                    </div>
+                    <div class="bg-blue-50 border border-blue-200 p-3 rounded-xl flex gap-3 items-center">
+                        <svg class="w-5 h-5 text-blue-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        <p class="text-xs text-blue-800">Pastikan mengecek mutasi masuk sebelum menekan Konfirmasi Pembayaran.</p>
+                    </div>
+                    <div class="pt-2">
+                        <label class="block text-sm font-bold text-slate-700 mb-2">Upload Bukti Bayar <span class="text-red-500">*</span></label>
+                        <input type="file" id="inputPaymentProof" accept="image/*" capture="environment" class="block w-full text-sm text-slate-500 file:mr-3 file:py-2.5 file:px-5 file:rounded-xl file:border-0 file:text-sm file:font-bold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100 transition-all cursor-pointer bg-slate-50 border border-slate-200 rounded-xl">
+                        <div id="proofPreviewContainer" class="mt-3 hidden text-center bg-slate-50 p-2 rounded-xl border border-slate-200">
+                            <img id="proofPreview" src="" class="h-32 object-contain mx-auto rounded-lg" />
+                        </div>
+                        <input type="hidden" id="proofBase64" value="">
+                    </div>
                 </div>
                 
                 <button id="btnConfirmPay" onclick="executeCheckout()" class="w-full bg-emerald-500 active:bg-emerald-700 text-white font-black py-4 rounded-xl text-lg shadow-lg mt-4 disabled:opacity-50 transition-all">
@@ -228,7 +264,7 @@ if(!in_array('settings', $perms)) {
         const formatRupiah = (num) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(num);
         const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 1500 });
 
-        // --- FETCH DATA ---
+        // --- FETCH DATA ---// --- FETCH DATA ---
         async function fetchInitData() {
             try {
                 const [resCat, resProd, resSet] = await Promise.all([
@@ -241,7 +277,10 @@ if(!in_array('settings', $perms)) {
                 const dataSet = await resSet.json();
 
                 if(dataCat.status === 'success') { categoriesList = dataCat.data; renderCategoryFilter(); }
-                if(dataSet.status === 'success') { appSettings = dataSet.data; }
+                if(dataSet.status === 'success') { 
+                    appSettings = dataSet.data; 
+                    renderDynamicPaymentMethods(); // FIX: Dinyalain lagi biar narik QRIS
+                }
                 if(dataProd.status === 'success') {
                     products = dataProd.data.filter(p => p.type === 'produk_jual');
                     products.forEach(p => {
@@ -251,6 +290,23 @@ if(!in_array('settings', $perms)) {
                 }
                 fetchCustomers();
             } catch (e) { console.error('Init Error', e); }
+        }
+
+        // --- RENDER METODE PEMBAYARAN DINAMIS ---
+        function renderDynamicPaymentMethods() {
+            const transferContainer = document.getElementById('transferListContainer');
+            if (transferContainer) {
+                let banks = []; try { banks = JSON.parse(appSettings.payment_transfer_list || '[]'); } catch(e){}
+                transferContainer.innerHTML = '';
+                banks.forEach((b, i) => { transferContainer.innerHTML += `<label class="flex items-center p-3 border rounded-xl"><input type="radio" name="bankTransfer" value="${b.bank}" ${i===0?'checked':''}> <span class="ml-3 font-bold text-sm">${b.bank} <br><span class="font-mono text-indigo-600">${b.number}</span></span></label>`; });
+            }
+            const qrisContainer = document.getElementById('qrisListContainer');
+            if (qrisContainer) {
+                let qrisArr = []; try { qrisArr = JSON.parse(appSettings.payment_qris_list || '[]'); } catch(e){}
+                qrisContainer.innerHTML = '';
+                if(qrisArr.length > 0 && document.getElementById('qrisDisplayImage')) document.getElementById('qrisDisplayImage').src = qrisArr[0].image;
+                qrisArr.forEach((q, i) => { qrisContainer.innerHTML += `<label class="flex-1 text-center py-2 px-3 border rounded-xl"><input type="radio" name="qrisSelect" class="hidden" ${i===0?'checked':''} onchange="document.getElementById('qrisDisplayImage').src='${q.image}'"> <span class="font-bold text-sm block">${q.name}</span></label>`; });
+            }
         }
 
         // --- PRODUCT MODAL LOGIC ---
@@ -338,14 +394,13 @@ if(!in_array('settings', $perms)) {
             }
         }
         function updateDynamicStocks() {
-            // Kalkulasi ulang stok (Simple re-implementation dari desktop)
+            // Kalkulasi ulang stok
             products.forEach(p => {
                 const used = cart.find(i => i.product_id == p.id)?.qty || 0;
-                p.calculated_stock = p.total_stock - used; // Simplifikasi untuk mode mobile VIP
+                p.calculated_stock = p.total_stock - used; 
             });
         }
 
-        // SKETSA UI KERANJANG SAMA PERSIS MINTAAN LU
         function renderCart() {
             const container = document.getElementById('mobileCartList');
             let total = 0;
@@ -384,14 +439,21 @@ if(!in_array('settings', $perms)) {
             document.getElementById('payTotalDisplay').innerText = formatRupiah(total);
         }
 
-        // --- CUSTOMER LOGIC (Copas dr Desktop) ---
+        // --- CUSTOMER LOGIC ---
         async function fetchCustomers() {
             try { const res = await fetch('../api/?action=get_customers'); const data = await res.json();
                 if(data.status === 'success') popupCustomersArray = data.data;
             } catch(e) {}
         }
-        function openCustomerSelectModal() { document.getElementById('customerSelectModal').classList.remove('hidden'); setTimeout(()=>document.getElementById('customerSelectModalContent').classList.remove('translate-y-full'), 10); renderPopupCustomerList(popupCustomersArray); }
-        function closeCustomerSelectModal() { document.getElementById('customerSelectModalContent').classList.add('translate-y-full'); setTimeout(()=>document.getElementById('customerSelectModal').classList.add('hidden'), 300); }
+        function openCustomerSelectModal() { 
+            document.getElementById('customerSelectModal').classList.remove('hidden'); 
+            setTimeout(() => document.getElementById('customerSelectModalContent').classList.remove('translate-y-full'), 10); 
+            renderPopupCustomerList(popupCustomersArray); 
+        }
+        function closeCustomerSelectModal() { 
+            document.getElementById('customerSelectModalContent').classList.add('translate-y-full'); 
+            setTimeout(() => document.getElementById('customerSelectModal').classList.add('hidden'), 300); 
+        }
         function filterPopupCustomers() { const kw = document.getElementById('popupSearchCustomer').value.toLowerCase(); renderPopupCustomerList(popupCustomersArray.filter(c => c.name.toLowerCase().includes(kw) || (c.phone&&c.phone.includes(kw)))); }
         function renderPopupCustomerList(data) {
             const cont = document.getElementById('popupCustomerContainer');
@@ -399,8 +461,19 @@ if(!in_array('settings', $perms)) {
             data.forEach(c => { cont.innerHTML += `<div onclick="executeSelectCustomer('${c.id}', '${c.name}')" class="m-2 p-4 bg-white rounded-xl border border-slate-200 font-bold text-sm text-slate-800 active:bg-slate-50">${c.name} <br><span class="text-xs text-slate-400 font-mono">${c.phone||'-'}</span></div>`; });
         }
         function executeSelectCustomer(id, name) { document.getElementById('customerSelect').value = id; document.getElementById('customerSelectedNameDisplay').innerText = name; closeCustomerSelectModal(); }
-        function triggerCreateFromPopup() { closeCustomerSelectModal(); setTimeout(()=> { document.getElementById('customerModal').classList.remove('hidden'); setTimeout(()=>document.getElementById('customerModalContent').classList.remove('scale-95'),10); }, 300); }
-        function closeCustomerModal() { document.getElementById('customerModalContent').classList.add('scale-95'); setTimeout(()=>document.getElementById('customerModal').classList.add('hidden'), 300); }
+        
+        function triggerCreateFromPopup() { 
+            closeCustomerSelectModal(); 
+            setTimeout(() => { 
+                const m = document.getElementById('customerModal'); m.classList.remove('hidden'); 
+                setTimeout(() => { m.classList.remove('opacity-0'); document.getElementById('customerModalContent').classList.remove('scale-95'); }, 10); 
+            }, 300); 
+        }
+        function closeCustomerModal() { 
+            const m = document.getElementById('customerModal'); document.getElementById('customerModalContent').classList.add('scale-95'); m.classList.add('opacity-0');
+            setTimeout(() => m.classList.add('hidden'), 300); 
+        }
+        
         async function submitNewCustomer() {
             const name = document.getElementById('custName').value, phone = document.getElementById('custPhone').value, addr = document.getElementById('custAddress').value;
             if(!name) return Toast.fire({icon:'warning', title:'Nama wajib!'});
@@ -410,7 +483,7 @@ if(!in_array('settings', $perms)) {
             } catch(e) {}
         }
 
-        // --- CHECKOUT LOGIC (Copas adaptasi mobile) ---
+        // --- CHECKOUT LOGIC ---
         function openCheckoutMenuModal() {
             if(cart.length===0) return Toast.fire({icon:'warning', title:'Keranjang kosong'});
             totalTagihanCheckout = cart.reduce((s, i) => s + (i.price_sell * i.qty), 0);
@@ -418,9 +491,14 @@ if(!in_array('settings', $perms)) {
             cart.forEach(i => { cont.innerHTML += `<div class="flex justify-between items-start mb-2 border-b border-slate-200 pb-2"><div class="flex-1 pr-2"><p class="text-sm font-bold text-slate-800">${i.name}</p><p class="text-[10px] text-slate-500">${formatRupiah(i.price_sell)} x ${i.qty}</p></div><span class="font-black">${formatRupiah(i.price_sell*i.qty)}</span></div>`; });
             document.getElementById('checkoutMenuTotalAwal').innerText = formatRupiah(totalTagihanCheckout);
             selectOrderMethod('bayar_langsung');
-            document.getElementById('checkoutMenuModal').classList.remove('hidden'); setTimeout(()=>document.getElementById('checkoutMenuModalContent').classList.remove('translate-y-full'), 10);
+            
+            document.getElementById('checkoutMenuModal').classList.remove('hidden'); 
+            setTimeout(() => document.getElementById('checkoutMenuModalContent').classList.remove('translate-y-full'), 10);
         }
-        function closeCheckoutMenuModal() { document.getElementById('checkoutMenuModalContent').classList.add('translate-y-full'); setTimeout(()=>document.getElementById('checkoutMenuModal').classList.add('hidden'), 300); }
+        function closeCheckoutMenuModal() { 
+            document.getElementById('checkoutMenuModalContent').classList.add('translate-y-full'); 
+            setTimeout(() => document.getElementById('checkoutMenuModal').classList.add('hidden'), 300); 
+        }
         function selectOrderMethod(m) {
             currentOrderMethod = m;
             ['bayar_langsung','piutang','buat_pesanan','gabung_pesanan'].forEach(id => {
@@ -430,29 +508,54 @@ if(!in_array('settings', $perms)) {
             btn.innerText = m==='bayar_langsung' ? 'Lanjut Pembayaran' : m.replace('_',' ').toUpperCase();
             btn.className = m==='bayar_langsung' ? 'w-full bg-emerald-500 active:bg-emerald-700 text-white font-black py-4 rounded-xl text-lg shadow-lg transition-all' : 'w-full bg-red-600 active:bg-red-800 text-white font-black py-4 rounded-xl text-lg shadow-lg transition-all';
         }
+        
         function proceedCheckoutMethod() {
             const cust = document.getElementById('customerSelect').value;
-            if(currentOrderMethod==='bayar_langsung') { closeCheckoutMenuModal(); setTimeout(openPaymentModal, 300); }
-            else { if(!cust) return Swal.fire('Oops','Pilih pelanggan untuk sistem piutang/pesanan','warning');
-                   if(currentOrderMethod==='buat_pesanan') executeOrderCheckout();
-                   if(currentOrderMethod==='piutang') executePiutangCheckout(); }
+            if(currentOrderMethod==='bayar_langsung') { 
+                closeCheckoutMenuModal(); setTimeout(openPaymentModal, 300); 
+            }
+            else { 
+                if(!cust) return Swal.fire('Oops','Pilih pelanggan untuk sistem piutang/pesanan','warning');
+                if(currentOrderMethod==='buat_pesanan') executeOrderCheckout();
+                if(currentOrderMethod==='piutang') executePiutangCheckout(); 
+            }
         }
         
         // --- PAYMENT LOGIC ---
         function openPaymentModal() {
             document.getElementById('payTotalDisplay2').innerText = formatRupiah(totalTagihanCheckout);
             selectMethod('CASH'); document.getElementById('inputCash').value=''; calculateChange();
-            document.getElementById('paymentModal').classList.remove('hidden'); setTimeout(()=>document.getElementById('paymentModalContent').classList.remove('translate-y-full'),10);
+            
+            document.getElementById('paymentModal').classList.remove('hidden'); 
+            setTimeout(() => document.getElementById('paymentModalContent').classList.remove('translate-y-full'), 10);
         }
-        function closePaymentModal() { document.getElementById('paymentModalContent').classList.add('translate-y-full'); setTimeout(()=>document.getElementById('paymentModal').classList.add('hidden'), 300); }
+        function closePaymentModal() { 
+            document.getElementById('paymentModalContent').classList.add('translate-y-full'); 
+            setTimeout(() => document.getElementById('paymentModal').classList.add('hidden'), 300); 
+        }
         function backToCheckoutMenu() { closePaymentModal(); setTimeout(openCheckoutMenuModal, 300); }
+        
+        // FIX: Toggle tampilan QRIS & Transfer
         function selectMethod(m) {
             currentPaymentMethod = m;
             ['CASH','QRIS','TRANSFER'].forEach(id => document.getElementById('btnMethod'+id).className = id===m ? `method-btn active bg-indigo-50 border-indigo-500 text-indigo-700 border-2 py-3 rounded-xl text-sm font-bold transition-all` : `method-btn bg-white border-slate-200 text-slate-600 border py-3 rounded-xl text-sm font-bold transition-all`);
-            document.getElementById('cashInputSection').classList.add('hidden'); document.getElementById('nonCashSection').classList.add('hidden');
-            if(m==='CASH') { document.getElementById('cashInputSection').classList.remove('hidden'); calculateChange(); }
-            else { document.getElementById('nonCashSection').classList.remove('hidden'); document.getElementById('btnConfirmPay').disabled=false; }
+            
+            document.getElementById('cashInputSection').classList.add('hidden'); 
+            document.getElementById('nonCashSection').classList.add('hidden');
+            document.getElementById('qrisView').classList.add('hidden');
+            document.getElementById('transferView').classList.add('hidden');
+
+            if(m==='CASH') { 
+                document.getElementById('cashInputSection').classList.remove('hidden'); 
+                calculateChange(); 
+            } else { 
+                document.getElementById('nonCashSection').classList.remove('hidden'); 
+                document.getElementById('btnConfirmPay').disabled=false; 
+                if (m === 'QRIS') { document.getElementById('qrisView').classList.remove('hidden'); document.getElementById('qrisView').classList.add('flex'); }
+                if (m === 'TRANSFER') { document.getElementById('transferView').classList.remove('hidden'); document.getElementById('transferView').classList.add('flex'); }
+            }
         }
+
         function calculateChange() {
             if(currentPaymentMethod!=='CASH') return;
             const cash = parseInt(document.getElementById('inputCash').value)||0;
@@ -467,7 +570,7 @@ if(!in_array('settings', $perms)) {
             const payload = {
                 cart: cart, total_amount: totalTagihanCheckout, payment_method: currentPaymentMethod, 
                 customer_id: document.getElementById('customerSelect').value, payment_proof: document.getElementById('proofBase64').value,
-                backdate_time: document.getElementById('inputBackdate').value // Fitur VIP Backdate
+                backdate_time: document.getElementById('inputBackdate').value 
             };
             try {
                 const res = await fetch('../api/?action=checkout', {method:'POST', body:JSON.stringify(payload)});
@@ -477,8 +580,26 @@ if(!in_array('settings', $perms)) {
                 } else { Swal.fire('Gagal', data.message, 'error'); btn.disabled=false; btn.innerText='Konfirmasi Pembayaran';}
             } catch(e) { Swal.fire('Error', 'Jaringan putus', 'error'); btn.disabled=false; }
         }
-        async function executeOrderCheckout() { /* Sama persis dgn di pos.php */ }
-        async function executePiutangCheckout() { /* Sama persis dgn di pos.php */ }
+
+        // FIX: Eksekusi Beneran untuk Buat Pesanan
+        async function executeOrderCheckout() {
+            const btn = document.getElementById('btnProceedCheckoutMethod'); btn.disabled = true; btn.innerText='Memproses...';
+            try {
+                const res = await fetch('../api/?action=checkout', { method: 'POST', body: JSON.stringify({ cart: cart, total_amount: totalTagihanCheckout, order_type: 'order', customer_id: document.getElementById('customerSelect').value, backdate_time: document.getElementById('inputBackdate').value }) });
+                const result = await res.json();
+                if (result.status === 'success') { closeCheckoutMenuModal(); Swal.fire({icon: 'success', title: 'Pesanan Dibuat!'}).then(() => { clearCart(); document.getElementById('customerSelect').value = ''; document.getElementById('customerSelectedNameDisplay').innerText = '-- Pelanggan Umum --'; }); }
+            } catch (error) { console.error(error); } finally { btn.disabled = false; btn.innerText='Buat Pesanan';}
+        }
+        
+        // FIX: Eksekusi Beneran untuk Piutang
+        async function executePiutangCheckout() {
+            const btn = document.getElementById('btnProceedCheckoutMethod'); btn.disabled = true; btn.innerText='Memproses...';
+            try {
+                const res = await fetch('../api/?action=checkout', { method: 'POST', body: JSON.stringify({ cart: cart, total_amount: totalTagihanCheckout, payment_method: 'PIUTANG', customer_id: document.getElementById('customerSelect').value, backdate_time: document.getElementById('inputBackdate').value }) });
+                const result = await res.json();
+                if (result.status === 'success') { closeCheckoutMenuModal(); Swal.fire({icon: 'success', title: 'Piutang Dicatat!'}).then(() => { clearCart(); document.getElementById('customerSelect').value = ''; document.getElementById('customerSelectedNameDisplay').innerText = '-- Pelanggan Umum --'; }); }
+            } catch (error) { console.error(error); } finally { btn.disabled = false; btn.innerText='Piutang';}
+        }
 
         document.getElementById('inputPaymentProof').addEventListener('change', function(e) {
             const file = e.target.files[0]; if (!file) return;
@@ -487,6 +608,7 @@ if(!in_array('settings', $perms)) {
                     const canvas = document.createElement('canvas'); const MAX_WIDTH = 600; const MAX_HEIGHT = 600; let width = img.width; let height = img.height;
                     if (width > height) { if (width > MAX_WIDTH) { height *= MAX_WIDTH / width; width = MAX_WIDTH; } } else { if (height > MAX_HEIGHT) { width *= MAX_HEIGHT / height; height = MAX_HEIGHT; } }
                     canvas.width = width; canvas.height = height; const ctx = canvas.getContext('2d'); ctx.drawImage(img, 0, 0, width, height);
+                    document.getElementById('proofPreview').src = canvas.toDataURL('image/jpeg', 0.6); document.getElementById('proofPreviewContainer').classList.remove('hidden');
                     document.getElementById('proofBase64').value = canvas.toDataURL('image/jpeg', 0.6); Toast.fire({icon:'success',title:'Bukti siap!'});
                 }; img.src = event.target.result;
             }; reader.readAsDataURL(file);
