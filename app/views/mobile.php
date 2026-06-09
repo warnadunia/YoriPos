@@ -1,22 +1,15 @@
 <?php
-// Cek hak akses untuk tombol VIP Add Order
+// Cek hak akses untuk tombol VIP
 $perms = $_SESSION['permissions'] ?? [];
 $isSuperAdmin = in_array('settings', $perms); // Cuma Super Admin yang punya menu settings
 
-// Tarik Pengaturan Toko dari index.php
+// Tarik Pengaturan Toko
 $storeName = $appSettings['store_name'] ?? 'Yori App';
-$storeLogo = $appSettings['store_logo'] ?? '';
+$userName = $_SESSION['name'] ?? $_SESSION['username'] ?? 'Johanna Doe';
+if (trim($userName) == '') $userName = 'Bosku';
 
-// Logika Sapaan Waktu Otomatis
-date_default_timezone_set('Asia/Jakarta');
-$hour = (int)date('H');
-if ($hour >= 5 && $hour < 11) { $greeting = 'Selamat pagi'; }
-elseif ($hour >= 11 && $hour < 15) { $greeting = 'Selamat siang'; }
-elseif ($hour >= 15 && $hour < 18) { $greeting = 'Selamat sore'; }
-else { $greeting = 'Selamat malam'; }
-
-// Nama User yang Login
-$userName = $_SESSION['username'] ?? 'Pengguna';
+// Badge Otomatis
+$roleBadge = $isSuperAdmin ? 'Owner' : 'Kasir / Kurir';
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -30,120 +23,125 @@ $userName = $_SESSION['username'] ?? 'Pengguna';
         if ('serviceWorker' in navigator) { navigator.serviceWorker.register('/sw.js'); }
     </script>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased selection:bg-indigo-100 selection:text-indigo-900 pb-24"> 
+<body class="bg-[#e4f4ed] text-slate-800 antialiased selection:bg-teal-100 selection:text-teal-900 pb-28 min-h-screen"> 
     
-    <div class="bg-indigo-600 rounded-b-3xl shadow-lg relative overflow-hidden z-20">
-        <div class="absolute top-0 right-0 opacity-10 scale-150 transform translate-x-5 -translate-y-5 pointer-events-none">
-            <svg class="w-40 h-40 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3z"></path></svg>
+    <div class="px-6 pt-8 pb-4">
+        <p class="text-[#0ba37f] font-medium text-lg tracking-wide"><?= $storeName ?></p>
+        
+        <div class="flex justify-between items-start mt-5">
+            <div>
+                <h1 class="text-[22px] font-medium text-[#295c5a]">Halo, <?= $userName ?></h1>
+                <span class="inline-block px-2.5 py-0.5 mt-1 bg-[#86c576] text-white text-[10px] font-bold rounded shadow-sm tracking-wide uppercase"><?= $roleBadge ?></span>
+            </div>
+            <a href="../api/?action=logout" class="w-11 h-11 bg-[#c5e6d8] hover:bg-[#aed8c6] active:scale-95 rounded-full flex justify-center items-center text-[#295c5a] transition-all shadow-sm">
+                <svg class="w-5 h-5 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+            </a>
         </div>
         
-        <div class="px-6 pt-8 pb-6 relative z-10">
-            <div class="flex justify-between items-start">
-                <div class="flex items-center gap-3">
-                    <?php if($storeLogo): ?>
-                        <img src="<?= $storeLogo ?>" alt="Logo" class="w-11 h-11 rounded-full object-cover border-2 border-white/50 shadow-sm">
-                    <?php else: ?>
-                        <div class="w-11 h-11 rounded-full bg-white/20 flex justify-center items-center text-white font-black text-lg border-2 border-white/50 shadow-sm">
-                            <?= strtoupper(substr($storeName, 0, 1)) ?>
-                        </div>
-                    <?php endif; ?>
-                    
-                    <div>
-                        <h1 class="text-xl font-black text-white tracking-wide leading-tight"><?= $storeName ?></h1>
-                        <p class="text-indigo-200 text-[10px] uppercase font-bold tracking-widest mt-0.5">Executive Dashboard</p>
-                    </div>
+        <h2 class="text-[22px] font-bold text-[#0ba37f] mt-8 mb-4">Executive Dashboard</h2>
+    </div>
+
+    <div class="px-5">
+        <div class="bg-[#0ba37f] rounded-[2rem] p-5 pb-12 relative text-white shadow-xl shadow-[#0ba37f]/20">
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex items-center gap-2.5 bg-white/10 px-3 py-1.5 rounded-full backdrop-blur-sm">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                    <span id="todayDate" class="text-xs font-medium tracking-wide">Memuat tanggal...</span>
                 </div>
-                <a href="../api/?action=logout" class="w-10 h-10 bg-white/10 hover:bg-white/20 active:scale-95 rounded-full flex justify-center items-center text-white transition-all backdrop-blur-sm">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                </a>
+                <div class="w-9 h-9 rounded-full bg-white/20 flex items-center justify-center backdrop-blur-sm">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                </div>
             </div>
-            
-            <div class="mt-7">
-                <h2 class="text-indigo-100 text-sm font-medium mb-0.5"><?= $greeting ?>,</h2>
-                <p class="text-white text-2xl font-black truncate"><?= $userName ?> 👋</p>
+
+            <div class="flex justify-between gap-3">
+                <div class="w-[55%] flex flex-col justify-center">
+                    <p class="text-[11px] font-bold tracking-widest mb-1 text-white/90">PENJUALAN</p>
+                    <div class="flex items-start gap-1">
+                        <span class="text-sm font-bold mt-1">Rp</span>
+                        <span class="text-4xl font-black tracking-tight leading-none" id="statPenjualan">0</span>
+                    </div>
+                    <p class="text-[11px] mt-2 font-medium text-white/80"><span id="statTrxCount">0</span> Transaksi</p>
+                </div>
+                <div class="w-[45%] bg-[#04ce9f] rounded-2xl p-3.5 shadow-inner flex flex-col justify-center">
+                    <p class="text-[10px] font-bold tracking-widest mb-1 text-white/90">PESANAN AKTIF</p>
+                    <div class="flex items-baseline gap-1">
+                        <span class="font-black text-2xl leading-none" id="statOrderCount">0</span>
+                        <span class="text-[10px] font-medium">Antrian</span>
+                    </div>
+                    <p class="text-[9px] mt-2 font-medium text-white/90">Nilai Rp <span id="statPesanan">0</span></p>
+                </div>
             </div>
         </div>
     </div>
 
     <?php if($isSuperAdmin): ?>
-    <div class="px-5 mt-5 max-w-md mx-auto relative z-10 flex gap-3">
-        <a href="?page=mobile_pos" class="flex-1 bg-indigo-600 text-white font-bold py-3 rounded-2xl flex flex-col items-center justify-center gap-1 shadow-sm active:scale-95 transition-transform border border-indigo-500">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
-            <span class="text-xs tracking-wide">Order</span>
+    <div class="px-10 -mt-6 relative z-10 flex gap-4">
+        <a href="?page=mobile_pos" class="flex-1 bg-[#7bc27b] shadow-lg shadow-[#7bc27b]/40 rounded-2xl py-3.5 flex items-center justify-center gap-2.5 text-white font-bold text-lg transition-transform active:scale-95 border border-white/20">
+            <div class="w-6 h-6 bg-white rounded-full flex items-center justify-center text-[#7bc27b]">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>
+            </div>
+            Order
         </a>
-        <a href="?page=mobile_expenses" class="flex-1 bg-orange-500 text-white font-bold py-3 rounded-2xl flex flex-col items-center justify-center gap-1 shadow-sm active:scale-95 transition-transform border border-orange-400">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 4v16m8-8H4"></path></svg>
-            <span class="text-xs tracking-wide">Pengeluaran</span>
+        <a href="?page=mobile_expenses" class="flex-1 bg-[#dda02a] shadow-lg shadow-[#dda02a]/40 rounded-2xl py-3.5 flex items-center justify-center gap-2.5 text-white font-bold text-lg transition-transform active:scale-95 border border-white/20">
+            <div class="w-6 h-6 bg-white rounded-full flex items-center justify-center text-[#dda02a]">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path></svg>
+            </div>
+            Biaya
         </a>
     </div>
     <?php endif; ?>
 
-    <div class="p-5 max-w-md mx-auto relative z-10 space-y-4 <?= !$isSuperAdmin ? 'mt-1' : '' ?>">
-        <div class="flex justify-between items-end mb-2 px-1">
-            <h2 class="font-bold text-slate-800 text-sm">Ringkasan Hari Ini</h2>
-            <p class="text-xs text-indigo-600 font-bold" id="todayDate">Hari ini</p>
+    <div class="px-5 mt-6 space-y-4">
+        
+        <div class="bg-[#eff7f2] border border-white/60 shadow-[0_4px_15px_rgba(0,0,0,0.02)] rounded-2xl p-5">
+            <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Rekap Pemasukan Kasir</p>
+            <div class="space-y-3.5">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center gap-3">
+                        <span class="w-2 h-2 rounded-full bg-[#4ade80]"></span>
+                        <span class="text-sm font-bold text-[#295c5a]">Tunai (Cash)</span>
+                    </div>
+                    <span class="font-black text-[#295c5a] text-[15px]" id="statCash">Rp 0</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center gap-3">
+                        <span class="w-2 h-2 rounded-full bg-[#60a5fa]"></span>
+                        <span class="text-sm font-bold text-[#295c5a]">QRIS</span>
+                    </div>
+                    <span class="font-black text-[#295c5a] text-[15px]" id="statQris">Rp 0</span>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center gap-3">
+                        <span class="w-2 h-2 rounded-full bg-[#f87171]"></span>
+                        <span class="text-sm font-bold text-[#295c5a]">Transfer Bank</span>
+                    </div>
+                    <span class="font-black text-[#295c5a] text-[15px]" id="statTransfer">Rp 0</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-[#eff7f2] border border-white/60 shadow-[0_4px_15px_rgba(0,0,0,0.02)] rounded-2xl p-5 flex justify-between items-end">
+            <div>
+                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Pengeluaran (Biaya)</p>
+                <h3 class="font-black text-xl text-[#c53030]" id="statExpenses">Rp 0</h3>
+            </div>
+            <div class="text-[#c53030] mb-1">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg>
+            </div>
         </div>
         
-        <div class="grid grid-cols-2 gap-4">
-            <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
-                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Penjualan</p>
-                <h3 class="font-black text-lg text-emerald-600" id="statPenjualan">...</h3>
-                <p class="text-xs font-bold text-slate-500 mt-1"><span id="statTrxCount">0</span> Transaksi</p>
-            </div>
-            <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200">
-                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Pesanan Aktif</p>
-                <h3 class="font-black text-lg text-indigo-600" id="statPesanan">...</h3>
-                <p class="text-xs font-bold text-slate-500 mt-1"><span id="statOrderCount">0</span> Antrean</p>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
-            <div class="px-4 py-3 bg-slate-50 border-b border-slate-100">
-                <h3 class="font-bold text-slate-700 text-xs uppercase tracking-wider">Pemasukan Kasir</h3>
-            </div>
-            <div class="p-4 space-y-4">
-                <div class="flex justify-between items-center">
-                    <div class="flex items-center gap-2">
-                        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                        <span class="text-sm font-bold text-slate-600">Tunai (Cash)</span>
-                    </div>
-                    <span class="font-black text-slate-800" id="statCash">...</span>
-                </div>
-                <div class="flex justify-between items-center">
-                    <div class="flex items-center gap-2">
-                        <span class="w-2.5 h-2.5 rounded-full bg-blue-500"></span>
-                        <span class="text-sm font-bold text-slate-600">QRIS</span>
-                    </div>
-                    <span class="font-black text-slate-800" id="statQris">...</span>
-                </div>
-                <div class="flex justify-between items-center">
-                    <div class="flex items-center gap-2">
-                        <span class="w-2.5 h-2.5 rounded-full bg-purple-500"></span>
-                        <span class="text-sm font-bold text-slate-600">Transfer Bank</span>
-                    </div>
-                    <span class="font-black text-slate-800" id="statTransfer">...</span>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex justify-between items-center">
-            <div>
-                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-1">Pengeluaran (Expenses)</p>
-                <h3 class="font-black text-lg text-red-500" id="statExpenses">...</h3>
-            </div>
-            <div class="w-10 h-10 rounded-full bg-red-50 flex justify-center items-center text-red-500">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 17h8m0 0V9m0 8l-8-8-4 4-6-6"></path></svg>
-            </div>
-        </div>
     </div>
     
-    <?php include 'components/bottomnav.php'; ?>
+    <?php include __DIR__ . '/components/bottomnav.php'; ?>
     
     <script>
+        // 2 Format Angka berbeda sesuai desain UI
         const formatRupiah = (number) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', minimumFractionDigits: 0 }).format(number);
+        const formatNominalOnly = (number) => new Intl.NumberFormat('id-ID').format(number); // Tanpa "Rp" di depannya
         
-        // Set Tanggal Hari Ini
-        document.getElementById('todayDate').innerText = new Date().toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long' });
+        // Format Tanggal ala Indonesia yang cantik (Contoh: Selasa, 9 Juni 2026)
+        const dateOptions = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+        document.getElementById('todayDate').innerText = new Date().toLocaleDateString('id-ID', dateOptions);
 
         async function loadDashboardStats() {
             try {
@@ -188,21 +186,23 @@ $userName = $_SESSION['username'] ?? 'Pengguna';
                     todayExp.forEach(e => { totalExpenses += parseFloat(e.amount || 0); });
                 }
 
-                document.getElementById('statPenjualan').innerText = formatRupiah(totalSales);
+                // Injeksi Data ke DOM dengan Format Masing-masing
+                document.getElementById('statPenjualan').innerText = formatNominalOnly(totalSales);
                 document.getElementById('statTrxCount').innerText = trxCount;
                 
+                document.getElementById('statPesanan').innerText = formatNominalOnly(totalOrderAmount);
+                document.getElementById('statOrderCount').innerText = orderCount;
+
                 document.getElementById('statCash').innerText = formatRupiah(totalCash);
                 document.getElementById('statQris').innerText = formatRupiah(totalQris);
                 document.getElementById('statTransfer').innerText = formatRupiah(totalTransfer);
-                
-                document.getElementById('statPesanan').innerText = formatRupiah(totalOrderAmount);
-                document.getElementById('statOrderCount').innerText = orderCount;
-                
                 document.getElementById('statExpenses').innerText = formatRupiah(totalExpenses);
 
             } catch (error) {
                 console.error('Gagal memuat statistik:', error);
-                ['statPenjualan','statCash','statQris','statTransfer','statPesanan','statExpenses'].forEach(id => document.getElementById(id).innerText = 'Rp 0');
+                document.getElementById('statPenjualan').innerText = '0';
+                document.getElementById('statPesanan').innerText = '0';
+                ['statCash','statQris','statTransfer','statExpenses'].forEach(id => document.getElementById(id).innerText = 'Rp 0');
             }
         }
 

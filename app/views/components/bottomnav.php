@@ -4,68 +4,64 @@ $active_page = $_GET['page'] ?? 'mobile';
 
 // Deteksi Hak Akses (Role Base)
 $perms = $_SESSION['permissions'] ?? [];
-// Asumsi: Super Admin/Owner pasti memiliki akses 'settings' atau 'users'
 $is_admin = in_array('settings', $perms) || in_array('users', $perms);
 
-// Definisi Struktur Navigasi Bawah
+// Definisi Navigasi Bawah dengan Ikon Baru (Premium Set)
 $nav_items = [
     [
         'page'  => 'mobile',
-        'label' => 'Home',
-        'icon'  => '<path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />',
-        'show'  => true // Kurir & Admin
-    ],
-    [
-        'page'  => 'mobile_delivery',
-        'label' => 'Pesanan',
-        'icon'  => '<path stroke-linecap="round" stroke-linejoin="round" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />',
-        'show'  => true // Kurir & Admin
-    ],
-    [
-        'page'  => 'mobile_receivables',
-        'label' => 'Piutang',
-        'icon'  => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />',
-        'show'  => true // Kurir & Admin
+        'label' => 'Dashboard',
+        'icon'  => '<path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />',
+        'show'  => true 
     ],
     [
         'page'  => 'mobile_history',
         'label' => 'Transaksi',
-        'icon'  => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />',
-        'show'  => true // Kurir & Admin
+        'icon'  => '<path stroke-linecap="round" stroke-linejoin="round" d="M10.125 2.25h-4.5c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125v-9M10.125 2.25h.375a9 9 0 019 9v.375M10.125 2.25A3.375 3.375 0 0113.5 5.625v1.5c0 .621.504 1.125 1.125 1.125h1.5a3.375 3.375 0 013.375 3.375M9 15l2.25 2.25L15 12" />',
+        'show'  => true 
+    ],
+    [
+        'page'  => 'mobile_delivery',
+        'label' => 'Pesanan',
+        'icon'  => '<path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />',
+        'show'  => true 
+    ],
+    [
+        'page'  => 'mobile_receivables',
+        'label' => 'Piutang',
+        'icon'  => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />',
+        'show'  => true 
     ],
     [
         'page'  => 'mobile_expenses',
-        'label' => 'Beban',
-        'icon'  => '<path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z" />',
-        'show'  => $is_admin // Hanya Admin
+        'label' => 'Biaya',
+        'icon'  => '<path stroke-linecap="round" stroke-linejoin="round" d="M21 12a2.25 2.25 0 00-2.25-2.25H15a3 3 0 11-6 0H5.25A2.25 2.25 0 003 12m18 0v6a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 18v-6m18 0V9M3 12V9m18 0a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 9m18 0V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v3" />',
+        'show'  => $is_admin // Hanya muncul buat Owner/Admin
     ]
 ];
 ?>
 
-<!-- Container Utama Bottom Nav -->
-<div class="fixed bottom-0 left-0 z-50 w-full h-[68px] bg-white border-t border-slate-100 flex justify-evenly items-center shadow-[0_-4px_20px_rgba(0,0,0,0.04)] pb-safe px-1">
+<div class="fixed bottom-5 left-4 right-4 z-50 h-[72px] bg-white rounded-full flex justify-around items-center shadow-[0_10px_40px_rgba(11,163,127,0.15)] px-2">
     
     <?php foreach ($nav_items as $item): ?>
         <?php if ($item['show']): 
-            // Cek apakah ini halaman yang sedang dibuka
             $isActive = ($active_page == $item['page']);
             
-            // Konfigurasi style aktif/pasif secara elegan
-            $colorClass  = $isActive ? 'text-indigo-600' : 'text-slate-400 group-hover:text-indigo-500';
-            $bgActive    = $isActive ? 'bg-indigo-50/80 scale-110' : 'scale-100';
-            $fontClass   = $isActive ? 'font-bold' : 'font-medium';
-            $strokeWidth = $isActive ? '2.5' : '2';
+            // Konfigurasi Efek "Nyebul" (Popping Out)
+            $iconWrap  = $isActive ? 'bg-[#0ba37f] text-white shadow-lg shadow-[#0ba37f]/40 -translate-y-6 scale-110 rounded-2xl' : 'text-[#0ba37f] bg-transparent translate-y-[-4px] group-hover:bg-[#e4f4ed] rounded-xl';
+            $fontClass = $isActive ? 'font-bold' : 'font-medium';
         ?>
             
-            <a href="?page=<?= $item['page'] ?>" class="flex flex-col items-center justify-center w-full h-full transition-all duration-200 group">
-                <!-- Wrapper Ikon dengan efek bubble jika aktif -->
-                <div class="p-1.5 rounded-xl transition-all duration-300 <?= $bgActive ?> <?= $colorClass ?>">
-                    <svg class="w-5 h-5 transition-transform duration-200 group-active:scale-90" fill="none" stroke="currentColor" stroke-width="<?= $strokeWidth ?>" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <a href="?page=<?= $item['page'] ?>" class="relative flex flex-col items-center justify-center w-full h-full group">
+                <div class="absolute transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] p-3 <?= $iconWrap ?> flex items-center justify-center z-10">
+                    <svg class="w-[22px] h-[22px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <?= $item['icon'] ?>
                     </svg>
                 </div>
-                <!-- Label Teks -->
-                <span class="text-[9px] mt-0.5 <?= $colorClass ?> <?= $fontClass ?> transition-colors"><?= $item['label'] ?></span>
+                
+                <span class="absolute bottom-2.5 text-[9px] text-[#0ba37f] <?= $fontClass ?> tracking-wide transition-all duration-300 <?= $isActive ? 'translate-y-0 opacity-100' : 'translate-y-1 opacity-80' ?>">
+                    <?= $item['label'] ?>
+                </span>
             </a>
 
         <?php endif; ?>
