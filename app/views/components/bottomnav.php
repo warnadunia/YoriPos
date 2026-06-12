@@ -41,7 +41,7 @@ $nav_items = [
 ];
 ?>
 
-<div class="fixed bottom-5 left-4 right-4 z-50 h-[72px] bg-white rounded-full flex justify-around items-center shadow-[0_10px_40px_rgba(11,163,127,0.15)] px-2">
+<div class="fixed bottom-0 left-4 right-4 z-50 h-[48px] bg-white rounded-full flex justify-around items-center shadow-[0_10px_40px_rgba(11,163,127,0.15)] px-2">
     
     <?php foreach ($nav_items as $item): ?>
         <?php if ($item['show']): 
@@ -53,7 +53,7 @@ $nav_items = [
         ?>
             
             <a href="?page=<?= $item['page'] ?>" class="relative flex flex-col items-center justify-center w-full h-full group">
-                <div class="absolute transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] p-3 <?= $iconWrap ?> flex items-center justify-center z-10">
+                <div class="absolute transition-all duration-300 ease-[cubic-bezier(0.34,1.56,0.64,1)] p-2 <?= $iconWrap ?> flex items-center justify-center z-10">
                     <svg class="w-[22px] h-[22px]" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <?= $item['icon'] ?>
                     </svg>
